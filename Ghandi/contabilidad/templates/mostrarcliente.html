@@ -1,0 +1,28 @@
+{%extends 'base.html'%}
+
+{% block content %}
+
+<table class="table table-bordered">
+    <thead>
+      <tr>
+        <th scope="dni">DNI</th>
+        <th scope="nombre">Nombre</th>
+        <th scope="apellido">Apellido</th>
+        <th scope="telefono">Teléfono</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for cliente in clientes %}
+        <tr>
+          <td>{{ cliente.dni }}</td>
+          <td>{{ cliente.nombre }}</td>
+          <td>{{ cliente.apellido }}</td>
+          <td>{{ cliente.telefono }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+<center>
+    <a class="btn btn-primary" href="{% url 'menu' %}" role="button">Volver al menú</a>
+</center>
+{% endblock%}
