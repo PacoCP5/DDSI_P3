@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content%}
+    <div style="center;"> 
+        <form method="post">  
+            {% csrf_token %}
+        <div>
+        <button class="btn btn-primary" id="alta-cliente-btn" name="alta-cliente-btn" type="submit">
+            Dar de alta nuevo cliente
+        </button>
+        </div>
+        </form> 
+        <br>
+        
+        <center>
+            <div>
+                <a href="{% url 'login:menu' %}" class="btn btn-secondary" id="volver-menu-btn">Volver atrás</a>
+            </div>
+            </center>
+        
+    </div>
+
+{% endblock %}

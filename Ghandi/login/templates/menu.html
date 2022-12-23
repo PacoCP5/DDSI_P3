@@ -2,30 +2,47 @@
 
 {% block content%}
     <div style="center;"> 
+
+        <form method="post">  
+            {% csrf_token %}
         <div>
-            <a class="btn btn-primary" href="{% url 'clientes'%}" role="button">Subsistema clientes</a>
+        <button class="btn btn-primary" id="clientes-btn" name="clientes-btn" type="submit">
+            Subsistema Clientes
+        </button>
+        </div>
+           
+        
+        <br>
+        <div>
+            <button class="btn btn-primary" id="logistica-btn" name="logistica-btn" type="submit">
+                Subsistema Logística
+            </button>
         </div>
         <br>
         <div>
-            <a class="btn btn-primary" href="{% url 'logistica' %}" role="button">Subsistema logística</a>
+            <button class="btn btn-primary" id="rh-btn" name="rh-btn" type="submit">
+                Subsistema Recursos Humanos
+            </button>
         </div>
         <br>
         <div>
-            <a class="btn btn-primary" href="rh" role="button">Subsistema recursos humanos</a>
+            <button class="btn btn-primary" id="contabilidad-btn" name="contabilidad-btn" type="submit">
+                Subsistema Contabilidad
+            </button>
         </div>
         <br>
         <div>
-            <a class="btn btn-primary" href="contabilidad" role="button">Subsistema contabilidad</a>
+            <button class="btn btn-primary" id="animales-btn" name="animales-btn" type="submit">
+                Subsistema Animales
+            </button>
         </div>
         <br>
         <div>
-            <a class="btn btn-primary" href="animales" role="button">Subsistema animales</a>
-        </div>
-        <br>
-        <div>
-            <a class="btn btn-primary" href="logout" role="button">Cerrar Sesión</a>
+            <button class="btn btn-primary" id="cerrar-btn" name="cerrar-btn" type="submit">
+                Cerrar sesión
+            </button>
         </div>
 
     </div>
-
+</form>
 {% endblock %}
