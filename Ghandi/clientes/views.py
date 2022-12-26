@@ -2,7 +2,7 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from login.views import bd 
+from login.views import BD
 from .forms import NuevoClienteForm
 import cx_Oracle
 
@@ -22,15 +22,14 @@ def alta_cliente(request):
             dni = form.cleaned_data["dni"]
             cuenta_bancaria = form.cleaned_data["cuenta_banco"]
             try:
-                
-                print("Dando de alta cliente: ", nombre, apellidos)
-                cursor = bd.cursor()
-                sql = "INSERT INTO cliente(dni, nombre, apellidos, telefono) VALUES ('{0}', '{1}', '{2}', '{3}')".format(str(dni),str(nombre), str(apellidos), str(telefono))
-                cursor.execute(sql)
-                bd.commit()
-                
-                messages.success(request, 'Cliente añadido correctamente')
-                
+                with BD().get_conexion().cursor() as cursor:
+                    print("Dando de alta cliente: ", nombre, apellidos)
+                    sql = "INSERT INTO cliente(dni, nombre, apellidos, telefono) VALUES ('{0}', '{1}', '{2}', '{3}')".format(str(dni),str(nombre), str(apellidos), str(telefono))
+                    cursor.execute(sql)
+                    cursor.commit()
+                    
+                    messages.success(request, 'Cliente añadido correctamente')
+                    
                 # si se ha conectado bien a la BD, lo redireccionamos  a la url del menú principal de la aplicación
                 return redirect("cliente:")
             except:

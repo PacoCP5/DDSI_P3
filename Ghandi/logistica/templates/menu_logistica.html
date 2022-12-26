@@ -1,41 +1,69 @@
 {% extends 'base.html' %}
 
-{% block content%}
-<h2>Área de Logística</h2>
-        <div>
-            <a class="btn btn-primary" href="hacer_pedido" role="button">Hacer Pedido</a>
-        </div>
-        <br>
-        <div>
-            <a class="btn btn-primary" href="consultar_stock" role="button">Consultar Stock</a>
-        </div>
-        <br>
-        <div>
-            <a class="btn btn-primary" href="almacenar_producto" role="button">Almacenar Producto</a>
-        </div>
-        <br>
-        <div>
-            <a class="btn btn-primary" href="asignar_jaula" role="button">Asignar Jaula</a>
-        </div>
-        <br>
-        <div>
-            <a class="btn btn-primary" href="consultar_disponibilidad_jaulas" role="button">Consultar Disponibilidad Jaulas</a>
-        </div>
-        <br>
-        <div>
-            <a class="btn btn-primary" href="vaciar_jaula" role="button">Vaciar Jaula</a>
-        </div>
-        <br>
-        <div>
-            <a class="btn btn-primary" href="alta_producto_almacen" role="button">Alta Producto en Almacén</a>
-        </div>
-        <br>
-        <br>
-        <br>
-        <div>
-            <a class="btn btn-primary" href="../" role="button">Volver al Menu Principal</a>
-        </div>
-    </div>
-        
+{% block title %}
+<title>Veterinaria Ghandi - Logistica</title>
+{% endblock title %}
 
-{% endblock %}
+{% block content%}
+<center> <h2>Área de Logística</h2> </center>
+<br>
+
+<form method="post">  
+    {% csrf_token %}
+<div>
+<button class="btn btn-primary" id="hacerpedido-btn" name="hacerpedido-btn" type="submit">
+    Hacer Pedido
+</button>
+</div>
+<br>
+<div>
+    <button class="btn btn-primary" id="consultarstock-btn" name="consultarstock-btn" type="submit">
+        Consultar Stock
+    </button>
+</div>
+<br>
+<div>
+    <button class="btn btn-primary" id="almacenarproducto-btn" name="almacenarproducto-btn" type="submit">
+        Almacenar Producto
+    </button>
+</div>
+<br>
+<div>
+    <button class="btn btn-primary" id="asignarjaula-btn" name="asignarjaula-btn" type="submit">
+        Asignar Jaula
+    </button>
+</div>
+<br>
+<div>
+    <button class="btn btn-primary" id="consultardisponibilidadjaulas-btn" name="consultardisponibilidadjaulas-btn" type="submit">
+        Consultar Disponibilidad Jaulas
+    </button>
+</div>
+<br>
+<div>
+    <button class="btn btn-primary" id="vaciarjaula-btn" name="vaciarjaula-btn" type="submit">
+        Vaciar Jaula
+    </button>
+</div>
+<br>
+<div>
+    <button class="btn btn-primary" id="altaproductoalmacen-btn" name="altaproductoalmacen-btn" type="submit">
+        Alta Producto Almacén
+    </button>
+</div>
+<br>
+<br>
+<div>
+    <button class="btn btn-primary" id="atras-btn" name="atras-btn" type="submit">
+        Volver al Menu Principal 
+    </button>
+</div>
+{% if error_message %}
+    <br>
+    <div class="alert alert-danger">
+        <center>{{ error_message }}</div></center>
+    </div>
+{% endif %}
+</div>
+</form>
+{% endblock content%}
