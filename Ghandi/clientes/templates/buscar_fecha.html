@@ -1,0 +1,38 @@
+{%extends 'base.html'%}
+
+{% block content %}
+
+<form method="POST" class="post-form" >
+  {% csrf_token %}
+  {{ form.media }}
+  {{ form.as_p  }}
+  <br>
+  <br>
+  <button type="submit" class="btn btn-primary">Buscar fechas</button>
+</form>
+<br>
+<br>
+<br>
+<br>
+<div style="width: 100"></div>
+<table class="table table-striped" style="width:600px">
+    <thead>
+      <tr>
+        <th scope="fecha">Hora</th>
+        
+      </tr>
+    </thead>
+    <tbody>
+      {% for hora in horas %}
+        <tr>
+          <td>{{ hora.hora }}</td>
+
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+  <center>
+    <a class="btn btn-primary" href="{% url 'clientes:menu_clientes' %}" role="button">Volver al menú</a>
+</center> 
+{% endblock%}

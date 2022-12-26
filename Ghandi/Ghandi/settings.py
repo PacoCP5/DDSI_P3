@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'animales.apps.AnimalesConfig',
     'rh.apps.RhConfig',
     'logistica.apps.LogisticaConfig',
+    'bootstrap_datepicker_plus'
 ]
 
 MIDDLEWARE = [
