@@ -1,0 +1,46 @@
+{%extends 'base.html'%}
+
+{% block content %}
+
+<form method="POST" class="post-form" >
+  {% csrf_token %}
+  {{ form.as_p  }}
+  <br>
+  <br>
+  <button type="submit" class="btn btn-primary">Buscar clientes</button>
+</form>
+<br>
+<br>
+<br>
+<br>
+<div style="width: 100"></div>
+<table class="table table-striped" style="width:600px">
+    <thead>
+      <tr>
+        <th scope="dni">DNI</th>
+        <th scope="nombre">Nombre</th>
+        <th scope="apellido">Apellido</th>
+        <th scope="telefono">Teléfono</th>
+        <th scope="direccion">Dirección</th>
+        <th scope="cuenta">Cuenta Bancaria</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for cliente in clientes %}
+        <tr>
+          <td>{{ cliente.dni }}</td>
+          <td>{{ cliente.nombre }}</td>
+          <td>{{ cliente.apellido }}</td>
+          <td>{{ cliente.telefono }}</td>
+          <td>{{ cliente.cuenta }}</td>
+          <td>{{ cliente.direccion }}</td>
+
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+  <center>
+    <a class="btn btn-primary" href="{% url 'clientes:menu_clientes' %}" role="button">Volver al menú</a>
+</center> 
+{% endblock%}
