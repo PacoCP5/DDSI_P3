@@ -12,8 +12,8 @@ class Singleton(type):
 #Python3
 class ConnectionBD( metaclass=Singleton):
     def establecer_conexion(self,username, passwd):
-        self.bd=     cx_Oracle.connect( user=username, 
-                              password=passwd,
+        self.bd=     cx_Oracle.connect( user='x1168499', 
+                              password='x1168499',
                               dsn="oracle0.ugr.es:1521/practbd.oracle0.ugr.es",
                               encoding="UTF-8")
 
