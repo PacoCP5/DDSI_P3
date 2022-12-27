@@ -7,7 +7,8 @@ from .forms import LoginBDForm
 
 from . import bd
 
-
+import cx_Oracle
+bd = 0
 
 def index(request):
     return render(request, "base.html")

@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block content%}
+    <div style="center;"> 
+        <h2>Área de Contabilidad</h2> 
+
+        <form method="post">  
+        {% csrf_token %}
+        <div>
+            <button class="btn btn-primary" id="emitir-factura-btn" name="emitir-factura-btn" type="submit">
+                Emitir una factura
+            </button>
+        </div>
+        <br>
+        <div>
+            <button class="btn btn-primary" id="pagar-factura-btn" name="pagar-factura-btn" type="submit">
+                Pagar una factura
+            </button>
+        </div>
+        <br>
+        <div>
+            <button class="btn btn-primary" id="ingreso-salario-btn" name="ingreso-salario-btn" type="submit">
+                Ingresar salario de un trabajador
+            </button>
+        </div>
+        <br>
+        <div>
+            <button class="btn btn-primary" id="pago-pedidos-btn" name="pago-pedidos-btn" type="submit">
+                Realizar el pago de un pedido
+            </button>
+        </div>
+        <br>
+        <div>
+            <button class="btn btn-primary" id="pedidos-pendientes-btn" name="pedidos-pendientes-btn" type="submit">
+                Consultar pedidos pendientes de pago
+            </button>
+        </div>
+        </form> 
+        <br>
+        <center>
+            <div>
+                <a href="{% url 'login:menu' %}" class="btn btn-secondary" id="volver-menu-btn">Volver atrás</a>
+            </div>
+        </center>
+    </div>
+
+{% endblock %}
