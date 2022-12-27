@@ -1,17 +1,30 @@
-{%extends 'base.html'%}
+{%extends 'baseclientes.html'%}
 
 {% block content %}
-
-<form method="POST" class="post-form" >
+<div style="width: 200px;
+margin: auto;"> 
+<form method="POST" class="post-form"  >
+  
   {% csrf_token %}
   {{ form.media }}
-  {{ form.as_p  }}
+  {{ form.as_p }}
   <br>
   <br>
   <button type="submit" class="btn btn-primary">Buscar fechas</button>
 </form>
+</div>
 <br>
 <br>
+
+{% if error_message %}
+        <br>
+        <div class="alert alert-danger">
+            <center>{{ error_message }}</div></center>
+        </div>
+        {% endif %}
+
+
+  
 <br>
 <br>
 <div style="width: 100"></div>
@@ -24,7 +37,7 @@
     </thead>
     <tbody>
       {% for hora in horas %}
-        <tr>
+        <tr class ='clickableRow'>
           <td>{{ hora.hora }}</td>
 
         </tr>

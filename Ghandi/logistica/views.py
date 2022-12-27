@@ -2,7 +2,8 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from .forms import *
 from django.contrib import messages
-from login.views import BD
+# @dani he cambiado esto pa que no de error
+from login import bd 
 
 import cx_Oracle
 bd = 0
@@ -60,7 +61,7 @@ def hacer_pedido(request):
             print(str(idproducto))
             try:
 
-                with BD.get_conexion().cursor() as cursor:
+                with bd.ConnectionBD.get_conexion().cursor() as cursor:
                     sql = "INSERT INTO Pedido(idpedido, cantidad, fecha, pagado, idproducto) VALUES ('{0}', {1}, TO_DATE('{2}','YYYY-DD-MM'), '{3}', '{4}')".format(str(idpedido),str(cantidad), str(fecha), str(pagado), str(idproducto))
                     print(sql)
                     cursor.execute(sql)

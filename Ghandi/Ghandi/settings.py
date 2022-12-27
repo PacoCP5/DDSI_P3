@@ -128,3 +128,14 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+BOOTSTRAP4 = {
+    "jquery_url": {
+        "url": "https://code.jquery.com/jquery-3.5.1.min.js",
+        "integrity": "sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2",
+        "crossorigin": "anonymous",
+    },
+    'include_jquery': True,
+
+
+}

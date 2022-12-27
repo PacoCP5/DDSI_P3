@@ -11,6 +11,15 @@
 </form>
 <br>
 <br>
+
+{% if error_message %}
+        <br>
+        <div class="alert alert-danger">
+            <center>{{ error_message }}</div></center>
+        </div>
+        {% endif %}
+
+
 <br>
 <br>
 <div style="width: 100"></div>
@@ -27,7 +36,7 @@
     </thead>
     <tbody>
       {% for cliente in clientes %}
-        <tr>
+        <tr class ='clickableRow'>
           <td>{{ cliente.dni }}</td>
           <td>{{ cliente.nombre }}</td>
           <td>{{ cliente.apellido }}</td>

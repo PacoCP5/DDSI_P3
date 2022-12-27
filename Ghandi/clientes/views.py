@@ -4,8 +4,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from login import bd 
 from .forms import NuevoClienteForm, BuscarClienteForm, BuscarFechaForm
-
-
+from datetime import datetime
 
 
 def main_cliente(request):
@@ -58,22 +57,23 @@ def buscar_fecha(request):
         
         form = BuscarFechaForm(request.POST)
         if form.is_valid():
-            fecha = form.cleaned_data["date"]
+            fecha = form.cleaned_data["date"].strftime("%d/%m/%y")
             
             try:
                 print("Buscando fecha: ", fecha)
                 cursor = bd.ConnectionBD().get_conexion().cursor()
-                clientes = [] 
-                sql = "SELECT fechahora FROM cita WHERE disponibilidad = 'Y' AND DATE(fechahora) = '{0}'".format(str(fecha))
+                horas = [] 
+
+                sql = "SELECT fechahora FROM cita WHERE disponibilidad = 'Y' AND TO_CHAR(fechahora, 'DD/MM/YY' ) LIKE '{0}'".format(str(fecha))
                 print(sql)
                 
                 cursor.execute(sql)
-                print(sql)
-                horas = [ {'hora':fila[0].split(" ")[1].split(',')[0]} for fila in  cursor.fetchall()]
+                
+                horas = [ {'hora':fila[0].strftime("%H:%M")} for fila in  cursor.fetchall()]
                 print(horas)
                 return render(request,"buscar_fecha.html", {"form":form , "horas": horas})
             except:
-                error_message="ERROR: Datos del cliente incorrectos"
+                error_message="ERROR: Datos de fecha incorrectos"
                 return render(request,"buscar_fecha.html", {"form": form, "error_message": error_message})
     return render(request, "buscar_fecha.html", {"form": BuscarFechaForm(), "horas":[]})
 
