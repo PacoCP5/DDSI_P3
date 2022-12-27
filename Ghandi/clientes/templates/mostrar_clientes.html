@@ -1,27 +1,8 @@
 {%extends 'base.html'%}
-
+{% load render_table from django_tables2 %}
 {% block content %}
 <div style="width: 100"></div>
-<table class="table table-bordered" style="width:600px">
-    <thead>
-      <tr>
-        <th scope="dni">DNI</th>
-        <th scope="nombre">Nombre</th>
-        <th scope="apellido">Apellido</th>
-        <th scope="telefono">Teléfono</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for cliente in clientes %}
-        <tr>
-          <td>{{ cliente.dni }}</td>
-          <td>{{ cliente.nombre }}</td>
-          <td>{{ cliente.apellido }}</td>
-          <td>{{ cliente.telefono }}</td>
-        </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+{% render_table table %}
 </div>
   <center>
     <a class="btn btn-primary" href="{% url 'clientes:menu_clientes' %}" role="button">Volver al menú</a>

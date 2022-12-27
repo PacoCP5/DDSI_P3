@@ -1,5 +1,5 @@
 {%extends 'baseclientes.html'%}
-
+{% load render_table from django_tables2 %}
 {% block content %}
 <div style="width: 200px;
 margin: auto;"> 
@@ -28,22 +28,7 @@ margin: auto;">
 <br>
 <br>
 <div style="width: 100"></div>
-<table class="table table-striped" style="width:600px">
-    <thead>
-      <tr>
-        <th scope="fecha">Hora</th>
-        
-      </tr>
-    </thead>
-    <tbody>
-      {% for hora in horas %}
-        <tr class ='clickableRow'>
-          <td>{{ hora.hora }}</td>
-
-        </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+{% render_table table %}
 </div>
   <center>
     <a class="btn btn-primary" href="{% url 'clientes:menu_clientes' %}" role="button">Volver al menú</a>

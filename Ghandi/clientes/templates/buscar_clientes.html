@@ -1,4 +1,5 @@
 {%extends 'base.html'%}
+{% load render_table from django_tables2 %}
 
 {% block content %}
 
@@ -23,6 +24,7 @@
 <br>
 <br>
 <div style="width: 100"></div>
+<div style="width: 100"></div>
 <table class="table table-striped" style="width:600px">
     <thead>
       <tr>
@@ -32,6 +34,7 @@
         <th scope="telefono">Teléfono</th>
         <th scope="direccion">Dirección</th>
         <th scope="cuenta">Cuenta Bancaria</th>
+        <th scope="action">Acciones</th>
       </tr>
     </thead>
     <tbody>
@@ -43,7 +46,9 @@
           <td>{{ cliente.telefono }}</td>
           <td>{{ cliente.cuenta }}</td>
           <td>{{ cliente.direccion }}</td>
-
+          <td><a href="{% url 'clientes:confirmar_borrado' pk=cliente.dni %}">
+            <button type="button" class="btn btn-danger">Delete</button>
+          </a></td>
         </tr>
       {% endfor %}
     </tbody>

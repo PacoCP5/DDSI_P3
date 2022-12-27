@@ -4,9 +4,11 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from login import bd 
 from .forms import NuevoClienteForm, BuscarClienteForm, BuscarFechaForm
+from .tables import ClienteTabla, ClienteTablaCompleta, Horas
 from datetime import datetime
 
-
+busqueda_cliente =""
+clientes_g = ""
 def main_cliente(request):
     return render(request, "main_cliente.html")
 
@@ -17,8 +19,9 @@ def mostrar_clientes(request):
     cursor.execute("SELECT dni, nombre, apellidos, telefono FROM cliente")
     
     clientes = [ {'dni':fila[0], 'nombre':fila[1], 'apellido':fila[2], 'telefono':fila[3]} for fila in  cursor.fetchall()]
+    table = ClienteTabla(clientes)
     print(clientes)
-    return render(request,"mostrar_clientes.html", {"clientes": clientes})
+    return render(request,"mostrar_clientes.html", {"table": table})
 
 
 def buscar_clientes(request):
@@ -29,6 +32,7 @@ def buscar_clientes(request):
             nombre = form.cleaned_data["nombre"]
             apellidos = form.cleaned_data["apellidos"]
             dni = form.cleaned_data["dni"]
+            
             
             try:
                 print("Buscando cliente: ", dni)
@@ -45,6 +49,7 @@ def buscar_clientes(request):
                 print(sql)
                 clientes = [ {'dni':fila[0], 'nombre':fila[1], 'apellido':fila[2], 'telefono':fila[3], 'direccion':fila[4], 'cuenta':fila[5]} for fila in  cursor.fetchall()]
                 print(clientes)
+                
                 return render(request,"buscar_clientes.html", {"form":form , "clientes": clientes})
             except:
                 error_message="ERROR: Datos del cliente incorrectos"
@@ -69,13 +74,14 @@ def buscar_fecha(request):
                 
                 cursor.execute(sql)
                 
-                horas = [ {'hora':fila[0].strftime("%H:%M")} for fila in  cursor.fetchall()]
+                horas = [ {'fecha':fila[0].strftime("%d/%m/%y"),'hora':fila[0].strftime("%H:%M")} for fila in  cursor.fetchall()]
+                table = Horas(horas)
                 print(horas)
-                return render(request,"buscar_fecha.html", {"form":form , "horas": horas})
+                return render(request,"buscar_fecha.html", {"form":form , "table": table})
             except:
                 error_message="ERROR: Datos de fecha incorrectos"
                 return render(request,"buscar_fecha.html", {"form": form, "error_message": error_message})
-    return render(request, "buscar_fecha.html", {"form": BuscarFechaForm(), "horas":[]})
+    return render(request, "buscar_fecha.html", {"form": BuscarFechaForm(), "table":Horas([])})
 
 
 def alta_cliente(request):
@@ -106,6 +112,44 @@ def alta_cliente(request):
 
     return render(request, "alta_cliente.html", {"form": NuevoClienteForm()})
     
+
+
+            
+def confirmar_borrado_cliente(request, pk):
+    if request.method == 'POST':
+        keys_request_POST = request.POST.keys()
+        
+        if 'borrar-btn' in keys_request_POST:
+            print("aqui")
+            try:
+                print("Borrando cliente: ", pk)
+                cursor = bd.ConnectionBD().get_conexion().cursor()
+                horas = [] 
+
+                sql = "DELETE FROM CLIENTE WHERE DNI LIKE '{0}'".format(str(pk))
+                print(sql)
+                
+                cursor.execute(sql)
+                bd.ConnectionBD().get_conexion().commit()
+                return redirect("clientes:buscar_clientes")
+            except:
+                error_message="ERROR: Borrado incorrecto"
+                return render(request,"confirmacion_borrado.html", {'dni': pk, "error_message": error_message})
+
+            return redirect("clientes:alta_cliente")
+        elif 'cancelar-btn' in keys_request_POST:
+            return redirect("clientes:buscar_clientes")
+    return render(request, 'confirmacion_borrado.html', {'dni': pk})
+
+
+    
+        
+
+      
+    
+            
+
+
 def menu_cliente(request):
     if request.method == 'POST':
         keys_request_POST = request.POST.keys()
