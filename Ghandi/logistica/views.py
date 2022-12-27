@@ -2,11 +2,9 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from .forms import *
 from django.contrib import messages
-# @dani he cambiado esto pa que no de error
-from login import bd 
+from login import bd
 
 import cx_Oracle
-bd = 0
 
 def index(request):
     return HttpResponse("Hello, World!")
@@ -36,10 +34,9 @@ def logout(request):
     return HttpResponseRedirect("/menu")
 
 def hacer_pedido(request):
-    form = HacerPedidoForm()
+    #form = HacerPedidoForm()
     if request.method == 'POST':
         form = HacerPedidoForm(request.POST)
-        print("HOLA")
         if form.is_valid():
             print("HOLA")
             idpedido = form.cleaned_data["idpedido"]
@@ -48,21 +45,46 @@ def hacer_pedido(request):
             pagado = form.cleaned_data["pagado"]
             idproducto = form.cleaned_data["idproducto"]
 
-            try:
+            if '.' in str(cantidad):
                 cant_split = str(cantidad).split('.')
                 cantidad = cant_split[0] + ',' + cant_split[1]
-            except:
-                print("hola")
 
-            print(str(idpedido))
-            print(str(cantidad))
-            print(str(fecha))
-            print(str(pagado))
-            print(str(idproducto))
             try:
+                cursor = bd.ConnectionBD().get_conexion().cursor()
+                print("cursor funciona")
+                sql = "INSERT INTO PEDIDO VALUES ('{0}', '{1}', TO_DATE('{2}','YYYY-DD-MM'), '{3}', '{4}');".format(str(idpedido), str(cantidad), str(fecha), str(pagado), str(idproducto))
+                cursor.execute(sql)
+                print("llego casi commit")
+                bd.ConnectionBD().get_conexion().commit()
+                
+                messages.success(request, 'Pedido Realizado')
+                
+                return HttpResponseRedirect('/menu/logistica')
+            except:
+                messages.error(request, '[ERROR] Fallo al hacer el pedido')
+                error_message="ERROR: No se puede insertar en la tabla"
+                return render(request,"hacerpedido.html", {"form": form, "error_message": error_message})
+        else:
+            error_message="[ERROR] Fallo en los datos introducidos"
+            return render(request,"hacerpedido.html",{'form':form, 'error_message':error_message})
+    return render(request,"hacerpedido.html", {"form": HacerPedidoForm()})
 
-                with bd.ConnectionBD.get_conexion().cursor() as cursor:
-                    sql = "INSERT INTO Pedido(idpedido, cantidad, fecha, pagado, idproducto) VALUES ('{0}', {1}, TO_DATE('{2}','YYYY-DD-MM'), '{3}', '{4}')".format(str(idpedido),str(cantidad), str(fecha), str(pagado), str(idproducto))
+def consultar_stock(request):
+    form = StockForm()
+    if request.method == 'POST':
+        form = StockForm(request.POST)
+        if form.is_valid():
+            idproducto = form.cleaned_data["idproducto"]
+            nombreproducto = form.cleaned_data["nombreproducto"]
+
+            try:
+                with bd.get_conexion().cursor() as cursor:
+                    if idproducto != "" and nombreproducto != "":
+                        sql = "SELECT * FROM Producto WHERE idproducto='{0}' AND nombre='{1}'".format(str(idproducto),str(nombreproducto))
+                    elif idproducto == "":
+                        sql = "SELECT * FROM Producto WHERE nombre='{0}'".format(str(nombreproducto))
+                    else:
+                        sql = "SELECT * FROM Producto WHERE idproducto='{0}'".format(str(idproducto))
                     print(sql)
                     cursor.execute(sql)
                     cursor.commit()
@@ -78,8 +100,6 @@ def hacer_pedido(request):
             error_message="[ERROR] Fallo en los datos introducidos"
             return render(request,"hacerpedido.html",{'form':form, 'error_message':error_message})
     return render(request,"hacerpedido.html", {"form": form})
-
-def consultar_stock(request):
     return HttpResponse("Hello, World!")
 
 def almacenar_producto(request):

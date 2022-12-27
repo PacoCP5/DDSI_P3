@@ -1,0 +1,33 @@
+{% extends 'base.html'%}
+
+{% block title %}
+<title>Veterinaria Ghandi - Logistica</title>
+{% endblock title %}
+
+{% block content%}
+<center> <h2>Área de Logística</h2> </center>
+<br>
+
+<h3>Consultar Stock</h3>
+<br>
+
+<form method="POST" class="post-form" >
+    {% csrf_token %}
+    {{ form  }}
+    <br>
+    <br>
+    <button type="submit">Consultar Producto</button>
+</form>
+
+<br>
+<center>
+    <a class="btn btn-primary" href="./" role="button">Volver al menú del Subsistema</a>
+</center> 
+{% if error_message %}
+    <br>
+    <div class="alert alert-danger">
+        <center>{{ error_message }}</div></center>
+    </div>
+{% endif %}
+
+{% endblock %}
