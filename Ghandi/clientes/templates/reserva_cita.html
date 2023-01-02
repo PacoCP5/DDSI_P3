@@ -1,6 +1,7 @@
 {%extends 'base.html'%}
 
 {% block content %}
+<h3>Seleccione el cliente para la cita {{fecha}} </h3>
 <div style="width: 100"></div>
 <table class="table table-bordered" style="width:600px">
     <thead>
@@ -19,11 +20,9 @@
           <td>{{ cliente.nombre }}</td>
           <td>{{ cliente.apellido }}</td>
           <td>{{ cliente.telefono }}</td>
-          <td><a href="{% url 'clientes:confirmar_borrado' pk=cliente.dni %}">
-            <button type="button" class="btn btn-danger">Delete</button>
-          </a>
-          <a href="{% url 'clientes:modificar_cliente' pk=cliente.dni %}">
-            <button type="button" class="btn btn-success">Modificar</button>
+          <td><a href="{% url 'clientes:asignar_cliente' pk=cliente.dni fecha=fecha %}">
+            <button type="button" class="btn btn-primary">Reservar</button>
+
           </a>
         </td>
 

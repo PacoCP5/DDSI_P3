@@ -23,8 +23,7 @@
 
 <br>
 <br>
-<div style="width: 100"></div>
-<div style="width: 100"></div>
+
 <table class="table table-striped" style="width:600px">
     <thead>
       <tr>
@@ -48,6 +47,8 @@
           <td>{{ cliente.direccion }}</td>
           <td><a href="{% url 'clientes:confirmar_borrado' pk=cliente.dni %}">
             <button type="button" class="btn btn-danger">Delete</button>
+          </a> <br> <a href="{% url 'clientes:modificar_cliente' pk=cliente.dni %}">
+            <button type="button" class="btn btn-success">Modificar</button>
           </a></td>
         </tr>
       {% endfor %}

@@ -28,7 +28,24 @@ margin: auto;">
 <br>
 <br>
 <div style="width: 100"></div>
-{% render_table table %}
+<table class="table table-striped" style="width:600px">
+  <thead>
+    <tr>
+      <th scope="fecha">Hora</th>
+      
+    </tr>
+  </thead>
+  <tbody>
+    {% for hora in horas %}
+      <tr class ='clickableRow'>
+        <td>{{ hora.hora }}</td>
+        <td><a href="{% url 'clientes:reservar_cita' pk=hora.fecha%}">
+          <button type="button" class="btn btn-primary">Reservar</button>
+        </a> </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
 </div>
   <center>
     <a class="btn btn-primary" href="{% url 'clientes:menu_clientes' %}" role="button">Volver al menú</a>

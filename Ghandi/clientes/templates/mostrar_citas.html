@@ -1,0 +1,51 @@
+{%extends 'base.html'%}
+
+{% block content %}
+
+<table class="table table-striped" style="width:800px">
+    <thead>
+      <tr>
+        <th scope="fecha">Fecha</th>
+        <th scope="dni">DNI</th>
+        <th scope="nombre">Nombre</th>
+        <th scope="apellido">Apellido</th>
+        <th scope="acciones">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for cita in citas %}
+        <tr>
+          <td>{{ cita.fecha }}</td>
+          {% if cita.dni %}
+          <td>{{ cita.dni }}</td>
+          <td>{{ cita.nombre }}</td>
+          <td>{{ cita.apellido }}</td>
+          
+            <td>
+              <div style="display:block;"><nobr>
+              <a href="{% url 'clientes:confirmar_liberacion' pk=cita.fecha %}">
+              <button type="button" class="btn btn-success">Liberar</button>
+            </a>     <a href="{% url 'clientes:reservar_cita' pk=cita.fecha %}">
+              <button type="button" class="btn btn-warning">Modificar Cliente</button>
+            </a></nobr></div>
+          </td>
+        {% endif %}
+        {% if not cita.dni %}
+        <td> </td>
+        <td> </td>
+        <td> </td>
+        
+          <td><a href="{% url 'clientes:reservar_cita' pk=cita.fecha %}">
+            <button type="button" class="btn btn-primary">Reservar</button>
+          </a></td>
+      {% endif %}
+          
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <center>
+    <a class="btn btn-primary" href="{% url 'clientes:menu_clientes' %}" role="button">Volver al menú</a>
+</center> 
+{% endblock%}
