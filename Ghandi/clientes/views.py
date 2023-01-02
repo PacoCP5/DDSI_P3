@@ -108,14 +108,15 @@ def alta_cliente(request):
                 sql = "INSERT INTO cliente(dni, nombre, apellidos, telefono) VALUES ('{0}', '{1}', '{2}', '{3}')".format(str(dni),str(nombre), str(apellidos), str(telefono))
                 cursor.execute(sql)
                 bd.ConnectionBD().get_conexion().commit()
-                
+                print(sql)
                 messages.success(request, 'Cliente añadido correctamente')
                 
                 # si se ha conectado bien a la BD, lo redireccionamos  a la url del menú principal de la aplicación
                 return redirect("cliente:alta_cliente")
             except:
-                 error_message="ERROR: Datos del cliente incorrectos"
-                 return render(request,"alta_cliente.html", {"form": form, "error_message": error_message})
+                messages.error(request, 'Error al añadir el cliente: ese DNI no es válido')
+                error_message="ERROR: Datos del cliente incorrectos"
+                return render(request,"alta_cliente.html", {"form": form, "error_message": error_message})
 
     return render(request, "alta_cliente.html", {"form": NuevoClienteForm()})
     
@@ -134,22 +135,26 @@ def modificar_cliente(request, pk):
                 
             print("Modificando cliente: ", nombre, apellidos)
             cursor = bd.ConnectionBD().get_conexion().cursor()
+            try:
+                sql = "UPDATE cliente SET "
+                if (dni != '') :sql += "dni='{0}'".format(str(dni))
+                if (nombre != '') :sql += ", nombre='{0}'".format(str(nombre))
+                if (apellidos != '') :sql += ", apellidos='{0}'".format(str(apellidos))
+                if (direccion != '') :sql += ", direccion='{0}'".format(str(direccion))
+                if (telefono != '') :sql += ", telefono='{0}'".format(str(telefono))
+                if (cuenta_bancaria != '') :sql += ", cuentabancaria='{0}'".format(str(cuenta_bancaria))
+                sql += "WHERE dni='{0}'".format( str(pk))
+                print(sql)
 
-            sql = "UPDATE cliente SET "
-            if (dni != '') :sql += "dni='{0}'".format(str(dni))
-            if (nombre != '') :sql += ", nombre='{0}'".format(str(nombre))
-            if (apellidos != '') :sql += ", apellidos='{0}'".format(str(apellidos))
-            if (direccion != '') :sql += ", direccion='{0}'".format(str(direccion))
-            if (telefono != '') :sql += ", telefono='{0}'".format(str(telefono))
-            if (cuenta_bancaria != '') :sql += ", cuentabancaria='{0}'".format(str(cuenta_bancaria))
-            sql += "WHERE dni='{0}'".format( str(pk))
-            print(sql)
+                cursor.execute(sql)
+                bd.ConnectionBD().get_conexion().commit()
+                
+                messages.success(request, 'Cliente modificado correctamente')
+            except:
+                messages.error(request, 'Error al modificar el cliente: el DNI no es válido')
+                error_message="ERROR: Datos del cliente incorrectos"
+                return render(request,"alta_cliente.html", {"form": form, "error_message": error_message})
 
-            cursor.execute(sql)
-            bd.ConnectionBD().get_conexion().commit()
-            
-            messages.success(request, 'Cliente modificado correctamente')
-            
             # si se ha conectado bien a la BD, lo redireccionamos  a la url del menú principal de la aplicación
             return redirect("clientes:mostrar_clientes")
             
@@ -190,8 +195,10 @@ def confirmar_borrado_cliente(request, pk):
                 
                 cursor.execute(sql)
                 bd.ConnectionBD().get_conexion().commit()
+
                 return redirect("clientes:mostrar_clientes")
             except:
+                messages.error(request, 'Error borrando cliente')
                 error_message="ERROR: Borrado incorrecto"
                 return render(request,"confirmacion_borrado.html", {'dni': pk, "error_message": error_message})
 
@@ -221,6 +228,7 @@ def confirmar_liberacion_cita(request, pk):
                 bd.ConnectionBD().get_conexion().commit()
                 return redirect("clientes:mostrar_citas")
             except:
+                messages.error(request, 'Error liberando cita')
                 error_message="ERROR: Liberación incorrecto"
                 return render(request,"confirmacion_liberacion.html", {'info': pk, "error_message": error_message})
 
@@ -254,6 +262,7 @@ def asignar_cliente(request, pk, fecha):
         bd.ConnectionBD().get_conexion().commit()
         return redirect("clientes:mostrar_citas")
     except:
+        messages.error(request, 'Error asignando cliente a cita')
         error_message="ERROR: Asignación incorrecta incorrecto"
         return redirect(reverse("clientes:reservar_cita", kwargs={ 'pk': fecha }))
 
