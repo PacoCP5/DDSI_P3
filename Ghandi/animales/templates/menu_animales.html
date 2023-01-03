@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block content%}
+    <div style="center;"> 
+        <h2>Área de Animales</h2> 
+
+        <form method="post">  
+        {% csrf_token %}
+        <div>
+            <button class="btn btn-primary" id="alta_animal-btn" name="alta_animal-btn" type="submit">
+                Dar de alta un animal
+            </button>
+        </div>
+        <br>
+        <div>
+            <button class="btn btn-primary" id="baja_animal-btn" name="baja_animal-btn" type="submit">
+                Dar de baja un animal
+            </button>
+        </div>
+        <br>
+        <div>
+            <button class="btn btn-primary" id="buscar_animales-btn" name="buscar_animales-btn" type="submit">
+                Consultar sobre animales
+            </button>
+        </div>
+        <br>
+        <div>
+            <button class="btn btn-primary" id="modificar_animales-btn" name="modificar_animales-btn" type="submit">
+                Modificar los animales
+            </button>
+        </div>
+        <br>
+        <div>
+            <button class="btn btn-primary" id="notificar_vacunas-btn" name="notificar_vacunas-btn" type="submit">
+                Notificar vacunas
+            </button>
+        </div>
+        </form> 
+        <br>
+        <center>
+            <div>
+                <a href="{% url 'login:menu' %}" class="btn btn-secondary" id="atras-btn">Volver atrás</a>
+            </div>
+        </center>
+    </div>
+
+{% endblock %}

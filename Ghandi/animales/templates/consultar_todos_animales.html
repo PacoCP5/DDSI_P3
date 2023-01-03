@@ -1,0 +1,29 @@
+{%extends 'base.html'%}
+
+{% block content %}
+<div style="width: 100"></div>
+<table class="table table-bordered" style="width:600px">
+    <thead>
+      <tr>
+        <th scope="dni">ID Animal</th>
+        <th scope="nombre">DNI Dueño</th>
+        <th scope="apellido">Tipo</th>
+        <th scope="telefono">Especie</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for a in animales %}
+        <tr>
+          <td>{{ a.id_animal }}</td>
+          <td>{{ a.dni }}</td>
+          <td>{{ a.tipo }}</td>
+          <td>{{ a.especie }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+  <center>
+    <a class="btn btn-primary" href="{% url 'animales:buscar_animales' %}" role="button">Volver al menú</a>
+</center> 
+{% endblock%}
