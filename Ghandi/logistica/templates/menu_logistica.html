@@ -52,12 +52,7 @@
     </button>
 </div>
 <br>
-<br>
-<div>
-    <button class="btn btn-primary" id="atras-btn" name="atras-btn" type="submit">
-        Volver al Menu Principal 
-    </button>
-</div>
+
 {% if error_message %}
     <br>
     <div class="alert alert-danger">
@@ -66,4 +61,10 @@
 {% endif %}
 </div>
 </form>
+<br>
+<center>
+    <div>
+        <a href="{% url 'login:menu' %}" class="btn btn-secondary" id="volver-menu-btn">Volver al Menu Principal</a>
+    </div>
+    </center>
 {% endblock content%}

@@ -8,7 +8,7 @@
 <center> <h2>Área de Logística</h2> </center>
 <br>
 
-<h3>Consultar Stock</h3>
+<h3>Consultar Disponibilidad Jaulas</h3>
 <br>
 
 <form method="POST" class="post-form" >
@@ -16,10 +16,10 @@
     {{ form  }}
     <br>
     <br>
-    <button id="consulta1" name="consulta1" type="submit">Consultar Producto</button>
+    <button id="consulta1" name="consulta1" type="submit">Consultar Jaula</button>
     <br>
     <br>
-    <button id="consulta2" name="consulta2" type="submit">Consultar todo el Almacén</button>
+    <button id="consulta2" name="consulta2" type="submit">Consultar todas las Jaulas</button>
 </form>
 <br>
 <br>
@@ -28,16 +28,16 @@
     <thead>
       <tr>
         <th scope="idProducto">idProducto</th>
-        <th scope="nombre">Nombre</th>
-        <th scope="cantidad">Cantidad</th>
+        <th scope="idAnimal">idAnimal</th>
+        <th scope="tamano">Tamaño Jaula</th>
       </tr>
     </thead>
     <tbody>
-      {% for producto in productos %}
+      {% for jaula in jaulas %}
         <tr>
-          <td>{{ producto.idproducto }}</td>
-          <td>{{ producto.nombre }}</td>
-          <td>{{ producto.cantidad }}</td>
+          <td>{{ jaula.idjaula }}</td>
+          <td>{{ jaula.idanimal }}</td>
+          <td>{{ jaula.tamano }}</td>
         </tr>
       {% endfor %}
     </tbody>

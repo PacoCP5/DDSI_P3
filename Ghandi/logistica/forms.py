@@ -8,5 +8,12 @@ class HacerPedidoForm(forms.Form):
     idproducto = forms.CharField(label="idProducto", widget=forms.TextInput(attrs={'placeholder': "idProducto"}))
 
 class StockForm(forms.Form):
-    idproducto = forms.IntegerField(label="idProducto", widget=forms.TextInput(attrs={'placeholder': "idProducto"}))
-    nombreproducto = forms.CharField(label="Nombre Producto", widget=forms.TextInput(attrs={'placeholder': "Nombre"}))
+    idproducto = forms.IntegerField(label="idProducto", required=False, widget=forms.TextInput(attrs={'placeholder': "idProducto"}))
+    nombreproducto = forms.CharField(label="Nombre Producto", required=False, widget=forms.TextInput(attrs={'placeholder': "Nombre (opcional)"}))
+
+class DisponibilidadForm(forms.Form):
+    idjaula = forms.IntegerField(label="idJaula", required=False, widget=forms.TextInput(attrs={'placeholder': "idJaula"}))
+    
+class AlmacenarForm(forms.Form):
+    idproducto = forms.IntegerField(label="idProducto", required=False, widget=forms.TextInput(attrs={'placeholder': "idProducto"}))
+    cantidad = forms.FloatField(label="Cantidad", widget=forms.TextInput(attrs={'placeholder': "Cantidad"}))
