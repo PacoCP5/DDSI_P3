@@ -13,7 +13,7 @@
 
 <form method="POST" class="post-form" >
     {% csrf_token %}
-    {{ form  }}
+    {{ form.as_p  }}
     <br>
     <br>
     <button id="consulta1" name="consulta1" type="submit">Consultar Producto</button>
@@ -24,7 +24,7 @@
 <br>
 <br>
 <div style="width: 100"></div>
-<table class="table table-bordered" style="width:600px">
+<table class="table table-striped" style="width:600px">
     <thead>
       <tr>
         <th scope="idProducto">idProducto</th>

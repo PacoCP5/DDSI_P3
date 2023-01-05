@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
-from .forms import *
+from .forms import HacerPedidoForm, StockForm, AlmacenarForm, DisponibilidadForm, AsignarForm, AltaProductoForm
 from django.contrib import messages
 from login import bd
 
@@ -19,7 +19,7 @@ def menu_logistica(request):
         elif 'almacenarproducto-btn' in keys_request_POST:
             return redirect("logistica:almacenar_producto")
         elif 'asignarjaula-btn' in keys_request_POST:
-            return redirect("logistica:asingar_jaula")
+            return redirect("logistica:asignar_jaula")
         elif 'consultardisponibilidadjaulas-btn' in keys_request_POST:
             return redirect("logistica:consultar_disponibilidad_jaulas")
         elif 'vaciarjaula-btn' in keys_request_POST:
@@ -45,6 +45,7 @@ def hacer_pedido(request):
             if '.' in str(cantidad):
                 cant_split = str(cantidad).split('.')
                 cantidad = cant_split[0] + ',' + cant_split[1]
+
 
             try:
                 cursor = bd.ConnectionBD().get_conexion().cursor()
@@ -81,6 +82,9 @@ def consultar_stock(request):
                 cursor.execute(sql)
                 productos = []
                 productos = [ {'idproducto':fila[0], 'nombre':fila[1], 'cantidad':fila[2]} for fila in  cursor.fetchall()]
+                if productos == []:
+                    error_message="ERROR: El Producto no existe"
+                    return render(request,"consultarstock.html", {"form": StockForm, "error_message": error_message})
                 
                 return render(request,'consultarstock.html', {"form": StockForm(), "productos": productos})
             else:
@@ -104,31 +108,40 @@ def almacenar_producto(request):
         if form.is_valid():
             idproducto = form.cleaned_data["idproducto"]
             cantidad = form.cleaned_data["cantidad"]
-            
-            if '.' in str(cantidad):
-                cant_split = str(cantidad).split('.')
-                cantidad = cant_split[0] + ',' + cant_split[1]
+
+            if (',' not in str(cantidad) and '.' not in str(cantidad)):
+                cantidad = str(cantidad) + '.0'            
+            if ',' in str(cantidad):
+                cant_split = str(cantidad).split(',')
+                cantidad = cant_split[0] + '.' + cant_split[1]
 
             try:
                 cursor = bd.ConnectionBD().get_conexion().cursor()
                 print("cursor funciona")
                 sql = "SELECT cantidad FROM producto WHERE idproducto='{0}'".format(str(idproducto))
                 cursor.execute(sql)
-
+                print("cursor funciona2")
                 productos = []
                 productos = [ {'cantidad':fila[0]} for fila in  cursor.fetchall()]
-
+                
+                print("cursor funciona3")
                 if productos == []:
                     error_message="ERROR: El Producto no existe"
                     return render(request,"almacenarproducto.html", {"form": AlmacenarForm, "error_message": error_message})
-        
-                sql = "UPDATE producto SET cantidad = '{0}'+'{1}' WHERE idproducto='{3}'".format(str(productos[0]), str(cantidad), str(idproducto))
+                print("cursor funciona4")
+                old_cantidad = str(productos[0]['cantidad'])
+                print(old_cantidad)
+                print(cantidad)
+                print(old_cantidad + '+' + str(cantidad))
+                sql = "UPDATE producto SET cantidad = {0}+{1} WHERE idproducto={2}".format(str(old_cantidad), str(cantidad), str(idproducto))
+                print(sql)
+                cursor = bd.ConnectionBD().get_conexion().cursor()
                 cursor.execute(sql)
 
                 print("llego casi commit")
                 bd.ConnectionBD().get_conexion().commit()
                 
-                messages.success(request, 'Pedido Realizado')
+                messages.success(request, '    Pedido Realizado con Éxito')
                 
                 return redirect("logistica:almacenar_producto")
             except:
@@ -141,7 +154,64 @@ def almacenar_producto(request):
 
 
 def asignar_jaula(request):
-    return HttpResponse("Hello, World!")
+    if request.method == 'POST':
+        form = AsignarForm(request.POST)
+        if form.is_valid():
+            idjaula = form.cleaned_data["idjaula"]
+            idanimal = form.cleaned_data["idanimal"]
+
+            try:
+                cursor = bd.ConnectionBD().get_conexion().cursor()
+                print("cursor funciona")
+                sql = "SELECT idanimal FROM animal WHERE idanimal='{0}'".format(str(idanimal))
+                cursor.execute(sql)
+                
+                animal = []
+                animal = [ {'idjaula':fila[0]} for fila in  cursor.fetchall()]
+                
+                if animal == []:
+                    error_message="ERROR: El Animal no existe"
+                    return render(request,"asignarjaula.html", {"form": AsignarForm(), "error_message": error_message})
+            
+                sql = "SELECT idjaula FROM jaula WHERE idanimal='{0}'".format(str(idanimal))
+                cursor.execute(sql)
+                
+                animal = []
+                animal = [ {'idjaula':fila[0]} for fila in  cursor.fetchall()]
+                
+                if animal != []:
+                    error_message="ERROR: El Animal ya estaba asignado a otra Jaula. Vacíala primero"
+                    return render(request,"asignarjaula.html", {"form": AsignarForm(), "error_message": error_message})
+            
+                sql = "SELECT idanimal FROM jaula WHERE idjaula='{0}'".format(str(idjaula))
+                cursor.execute(sql)
+                
+                animal = []
+                animal = [ {'idanimal':fila[0]} for fila in  cursor.fetchall()]
+                print(animal[0]['idanimal'])
+                if str(animal[0]['idanimal']) != 'None':
+                    error_message="ERROR: La Jaula no está vacía"
+                    return render(request,"asignarjaula.html", {"form": AsignarForm(), "error_message": error_message})
+            
+                sql = "UPDATE jaula SET idanimal = {0} WHERE idjaula={1}".format(str(idanimal), str(idjaula))
+                print(sql)
+                cursor = bd.ConnectionBD().get_conexion().cursor()
+                cursor.execute(sql)
+
+                print("llego casi commit")
+                bd.ConnectionBD().get_conexion().commit()
+                
+                messages.success(request, '    Animal asignado con Éxito')
+                
+                return redirect("logistica:asignar_jaula")
+            except:
+                error_message="ERROR: La Jaula no existe"
+                return render(request,"asignarjaula.html", {"form": AsignarForm(), "error_message": error_message})
+        else:
+            error_message="[ERROR] Fallo en los datos introducidos"
+            return render(request,"asignarjaula.html",{'form':AsignarForm(), 'error_message':error_message})
+    return render(request,"asignarjaula.html", {"form": AsignarForm()})
+
 
 def consultar_disponibilidad_jaulas(request):
     if request.method == 'POST':
@@ -157,6 +227,9 @@ def consultar_disponibilidad_jaulas(request):
                 cursor.execute(sql)
                 jaulas = []
                 jaulas = [ {'idjaula':fila[0], 'idanimal':fila[1], 'tamano':fila[2]} for fila in  cursor.fetchall()]
+                if jaulas == []:
+                    error_message="ERROR: La Jaula no existe"
+                    return render(request,"consultardisponibilidadjaulas.html", {"form": DisponibilidadForm(), "error_message": error_message})
                 
                 return render(request,'consultardisponibilidadjaulas.html', {"form": DisponibilidadForm(), "jaulas": jaulas})
             else:
@@ -175,10 +248,100 @@ def consultar_disponibilidad_jaulas(request):
     return render(request,"consultardisponibilidadjaulas.html", {"form": DisponibilidadForm()})
 
 def vaciar_jaula(request):
-    return HttpResponse("Hello, World!")
+    if request.method == 'POST':
+        form = DisponibilidadForm(request.POST)
+        if form.is_valid():
+            idjaula = form.cleaned_data["idjaula"]
+
+            try:
+                cursor = bd.ConnectionBD().get_conexion().cursor()
+                print("cursor funciona")
+                sql = "SELECT idanimal FROM jaula WHERE idjaula='{0}'".format(str(idjaula))
+                cursor.execute(sql)
+                
+                animal = []
+                animal = [ {'idanimal':fila[0]} for fila in  cursor.fetchall()]
+                
+                if str(animal[0]['idanimal']) == 'None':
+                    error_message="ERROR: La Jaula ya estaba Vacía"
+                    return render(request,"vaciarjaula.html", {"form": DisponibilidadForm(), "error_message": error_message})
+            
+                sql = "UPDATE jaula SET idanimal = '' WHERE idjaula={0}".format(str(idjaula))
+                print(sql)
+                cursor = bd.ConnectionBD().get_conexion().cursor()
+                cursor.execute(sql)
+
+                print("llego casi commit")
+                bd.ConnectionBD().get_conexion().commit()
+                
+                messages.success(request, '    Jaula vaciada con Éxito')
+                
+                return redirect("logistica:vaciar_jaula")
+            except:
+                error_message="ERROR: La Jaula no existe"
+                return render(request,"vaciarjaula.html", {"form": DisponibilidadForm(), "error_message": error_message})
+        else:
+            error_message="[ERROR] Fallo en los datos introducidos"
+            return render(request,"vaciarjaula.html",{'form':DisponibilidadForm(), 'error_message':error_message})
+    return render(request,"vaciarjaula.html", {"form": DisponibilidadForm()})
+
+
 
 def alta_producto_almacen(request):
-    return HttpResponse("Hello, World!")
+    if request.method == 'POST':
+        form = AltaProductoForm(request.POST)
+        if form.is_valid():
+            idproducto = form.cleaned_data["idproducto"]
+            nombreproducto = form.cleaned_data["nombreproducto"]
+            print(idproducto)
+            try:
+                cursor = bd.ConnectionBD().get_conexion().cursor()
+                
+                if str(idproducto) == 'None':
+                    sql = "SELECT idproducto FROM producto"
+                    cursor.execute(sql)
+                    print("cursor funciona2")
+                    productos = []
+                    productos = [ {'idproducto':fila[0]} for fila in  cursor.fetchall()]
+                    ids = []
+                    for producto in productos:
+                        print(int(producto['idproducto']))
+                        ids.append(int(producto['idproducto']))
+                    print(ids)
+                    ids.sort(reverse=True)
+                    print(ids)
+                    idproducto = ids[0]+1
+                else:
+                    sql = "SELECT idproducto FROM producto WHERE idproducto={0}".format(str(idproducto))
+                    cursor.execute(sql)
+                    print("cursor funciona2")
+                    productos = []
+                    productos = [ {'idproducto':fila[0]} for fila in  cursor.fetchall()]
+
+                    if productos != []:
+                        error_message="ERROR: Ya existe un Producto con ese idProducto"
+                        return render(request,"altaproducto.html", {"form": AltaProductoForm(), "error_message": error_message})
+                
+                print("cursor funciona4")
+                sql = "INSERT INTO producto(idproducto, nombre,cantidad) VALUES ({0},'{1}',0.0)".format(str(idproducto),str(nombreproducto))
+                print(sql)
+                cursor = bd.ConnectionBD().get_conexion().cursor()
+                cursor.execute(sql)
+
+                print("llego casi commit")
+                bd.ConnectionBD().get_conexion().commit()
+                
+                messages.success(request, '    Producto Registrado con Éxito')
+                
+                return redirect("logistica:alta_producto_almacen")
+            except:
+                error_message="ERROR: No se puede insertar en la tabla"
+                return render(request,"altaproducto.html", {"form": AltaProductoForm(), "error_message": error_message})
+        else:
+            error_message="[ERROR] Fallo en los datos introducidos"
+            return render(request,"altaproducto.html",{'form':AltaProductoForm(), 'error_message':error_message})
+    return render(request,"altaproducto.html", {"form": AltaProductoForm()})
+
 
 def menu_general(request):
     return HttpResponseRedirect("login")
