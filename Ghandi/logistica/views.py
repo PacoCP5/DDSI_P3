@@ -42,20 +42,76 @@ def hacer_pedido(request):
             pagado = form.cleaned_data["pagado"]
             idproducto = form.cleaned_data["idproducto"]
 
-            if '.' in str(cantidad):
-                cant_split = str(cantidad).split('.')
-                cantidad = cant_split[0] + ',' + cant_split[1]
-
+            if (',' not in str(cantidad) and '.' not in str(cantidad)):
+                cantidad = str(cantidad) + '.0'            
+            if ',' in str(cantidad):
+                cant_split = str(cantidad).split(',')
+                cantidad = cant_split[0] + '.' + cant_split[1]
+            try:
+                a = int(cantidad)
+            except:
+                error_message="ERROR: Cantidad en Formato Incorrecto"
+                return render(request,"hacerpedido.html", {"form": form, "error_message": error_message})
+        
+            print(fecha)
+            cantidad_split = str(fecha).split('-')
+            if len(cantidad_split) != 3 or len(cantidad_split[0]) != 4 or len(cantidad_split[1]) != 2 or len(cantidad_split[2]) != 2:
+                error_message="ERROR: Fecha en Formato Incorrecto"
+                return render(request,"hacerpedido.html", {"form": form, "error_message": error_message})
+            print(str(pagado))
+            if (str(pagado) not in ['S','N']) and str(pagado) != '' and str(pagado) != 'None':
+                error_message="ERROR: El atributo Pagado debe ser 'S' (sí) o 'N' (no)"
+                return render(request,"hacerpedido.html", {"form": form, "error_message": error_message})
+            elif (pagado == 'None' or pagado == ''):
+                pagado = 'N'
 
             try:
                 cursor = bd.ConnectionBD().get_conexion().cursor()
-                print("cursor funciona")
-                sql = "INSERT INTO PEDIDO VALUES ('{0}', '{1}', TO_DATE('{2}','YYYY-DD-MM'), '{3}', '{4}')".format(str(idpedido), str(cantidad), str(fecha), str(pagado), str(idproducto))
+                
+                if str(idpedido) == 'None':
+                    sql = "SELECT idpedido FROM pedido"
+                    cursor.execute(sql)
+                    print("cursor funciona2")
+                    pedidos = []
+                    pedidos = [ {'idpedido':fila[0]} for fila in  cursor.fetchall()]
+                    ids = []
+                    for pedido in pedidos:
+                        ids.append(int(pedido['idpedido']))
+                    print(ids)
+                    ids.sort(reverse=True)
+                    print(ids)
+                    idpedido = ids[0]+1
+                else:
+                    sql = "SELECT idpedido FROM pedido WHERE idpedido={0}".format(str(idpedido))
+                    cursor.execute(sql)
+                    print("cursor funciona2")
+                    pedidos = []
+                    pedidos = [ {'idpedido':fila[0]} for fila in  cursor.fetchall()]
+
+                    if pedidos != []:
+                        error_message="ERROR: Ya existe un Pedido con ese idPedido"
+                        return render(request,"hacerpedido.html", {"form": form, "error_message": error_message})
+                
+                sql = "SELECT idproducto FROM producto WHERE idproducto={0}".format(str(idproducto))
                 cursor.execute(sql)
+                print("cursor funciona2")
+                productos = []
+                productos = [ {'idproducto':fila[0]} for fila in  cursor.fetchall()]
+
+                if productos == []:
+                    error_message="ERROR: Ese Producto no está registrado, debes darlo de alta primero"
+                    return render(request,"hacerpedido.html", {"form": form, "error_message": error_message})
+            
+                print("cursor funciona4")
+                sql = "INSERT INTO PEDIDO VALUES ({0}, {1}, TO_DATE('{2}','YYYY-DD-MM'), '{3}', {4})".format(str(idpedido), str(cantidad), str(fecha), str(pagado), str(idproducto)) 
+                print(sql)
+                cursor = bd.ConnectionBD().get_conexion().cursor()
+                cursor.execute(sql)
+
                 print("llego casi commit")
                 bd.ConnectionBD().get_conexion().commit()
                 
-                messages.success(request, 'Pedido Realizado')
+                messages.success(request, '    Producto Registrado con Éxito')
                 
                 return redirect("logistica:hacer_pedido")
             except:
