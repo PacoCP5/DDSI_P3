@@ -1,6 +1,9 @@
 {% extends 'base.html' %}
 
 {% block content%}
+<center> <h2>Área de Clientes</h2> </center>
+
+<center> <h5><FONT COLOR=grey>by María Aguado</FONT></h5> </center>
     <div style="center;"> 
         <form method="post">  
             {% csrf_token %}
@@ -28,6 +31,12 @@
                         Buscar horas disponibles
                     </button>
                     </div>
+                    <br>
+                    <div>
+                        <button class="btn btn-primary" id="mostrar-citas-btn" name="mostrar-citas-btn" type="submit">
+                            Mostrar Citas
+                        </button>
+                        </div>
         </form> 
         <br>
         

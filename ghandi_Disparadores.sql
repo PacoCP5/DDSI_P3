@@ -76,24 +76,53 @@ EXCEPTION
 END;
 /
 
-CREATE OR REPLACE TRIGGER citaLibre
+create or replace TRIGGER citaLibre
    BEFORE
    INSERT OR UPDATE
    ON CITA
    FOR EACH ROW
 DECLARE
-   citaOcupada INTEGER;
-   errorCitaOcupada EXCEPTION;
+   existecliente INTEGER;
+   errorCliente EXCEPTION;
+   errorDisponibilidad EXCEPTION;
+   errorValores EXCEPTION;
+
 BEGIN
-   SELECT COUNT(*) INTO citaOcupada
-   FROM CITA WHERE FECHAHORA = :new.FECHAHORA;
-   IF citaOcupada > 0 THEN
-       RAISE errorCitaOcupada;
-   END IF;
+
+    IF UPDATING('DNI') or UPDATING('DISPONIBILIDAD') THEN
+        IF (:NEW.DNI IS NULL AND :NEW.DISPONIBILIDAD='N' ) OR (NOT :NEW.DNI IS NULL AND :NEW.DISPONIBILIDAD='Y') THEN
+            RAISE errorValores;
+        END IF;
+    END IF;
+
+    IF UPDATING('DNI') THEN
+        IF NOT :NEW.DNI IS NULL THEN 
+           SELECT COUNT(*) INTO existeCliente
+           FROM CLIENTE WHERE DNI = :new.dni;
+           IF existeCliente = 0 THEN
+               RAISE errorCliente;
+           END IF;
+        END IF;
+    END IF;
+    IF UPDATING('DISPONIBILIDAD') THEN
+        IF :NEW.DISPONIBILIDAD != 'N' AND :NEW.DISPONIBILIDAD != 'Y' THEN 
+
+            RAISE errorDisponibilidad;
+
+        END IF;
+    END IF;
+
 EXCEPTION
-   WHEN errorCitaOcupada THEN
-       DBMS_OUTPUT.PUT_LINE('[ERROR] La cita no está disponible');
-       raise_application_error(-10324, :new.FECHAHORA || ' ya está ocupada');  
+   WHEN errorCliente THEN
+       DBMS_OUTPUT.PUT_LINE('[ERROR] Cliente unavailable');
+       raise_application_error(-20324, 'El cliente ' || :new.DNI || ' no está registrado');  
+    WHEN errorDisponibilidad THEN
+       DBMS_OUTPUT.PUT_LINE('[ERROR] Disponibilidad mal');
+       raise_application_error(-20325, 'El valor ' || :new.DISPONIBILIDAD || ' no es correcto');  
+    WHEN errorValores THEN
+       DBMS_OUTPUT.PUT_LINE('[ERROR] Valores mal');
+       raise_application_error(-20326, 'Los valores de cita y dni no son consistentes');  
+
 END;
 /
 

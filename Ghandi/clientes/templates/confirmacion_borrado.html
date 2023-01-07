@@ -1,0 +1,33 @@
+
+{%extends 'baseclientes.html'%}
+{% block title %}
+<title>Veterinaria Ghandi - Clientes</title>
+{% endblock title %}
+
+{% block content%}
+<br>
+
+    <center>
+    <div style="center;"> 
+
+        <h3>¿Está seguro de que quiere borrar el cliente con DNI: {{dni}}?</h3>
+        <form method="post">  
+            {% csrf_token %}
+        <div>
+        <button class="btn btn-primary" id="borrar-btn" name="borrar-btn" type="submit">
+            Borrar
+        </button>
+        </div>
+        <br>
+        <div>
+            <button class="btn btn-primary" id="cancelar-btn" name="cancelar-btn" type="submit">
+                Cancelar
+            </button>
+            </div>
+            <br>
+   
+        </form>      
+    </div>
+</center>
+
+{% endblock %}
