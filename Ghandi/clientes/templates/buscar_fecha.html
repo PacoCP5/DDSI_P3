@@ -1,6 +1,15 @@
 {%extends 'baseclientes.html'%}
 {% load render_table from django_tables2 %}
-{% block content %}
+
+
+{% block title %}
+<title>Veterinaria Ghandi - Clientes</title>
+{% endblock title %}
+
+{% block content%}
+
+
+<center><h3>Buscar citas</h3></center>
 <div style="width: 200px;
 margin: auto;"> 
 <form method="POST" class="post-form"  >
@@ -27,6 +36,7 @@ margin: auto;">
   
 <br>
 <br>
+<center>
 <div style="width: 100"></div>
 <table class="table table-striped" style="width:600px">
   <thead>
@@ -47,6 +57,7 @@ margin: auto;">
   </tbody>
 </table>
 </div>
+</center>
   <center>
     <a class="btn btn-primary" href="{% url 'clientes:menu_clientes' %}" role="button">Volver al menú</a>
 </center> 

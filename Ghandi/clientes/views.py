@@ -83,7 +83,9 @@ def buscar_fecha(request):
                 cursor.execute(sql)
                 
                 horas = [ {'fecha':fila[0],'hora':fila[0].strftime("%H:%M")} for fila in  cursor.fetchall()]
-                
+                if (len(horas) == 0):
+                    error_message="ERROR: No hay citas disponibles para la fecha seleccionada"
+                    return render(request,"buscar_fecha.html", {"form": form, "error_message": error_message})
                 return render(request,"buscar_fecha.html", {"form":form , "horas": horas})
             except:
                 error_message="ERROR: Datos de fecha incorrectos"

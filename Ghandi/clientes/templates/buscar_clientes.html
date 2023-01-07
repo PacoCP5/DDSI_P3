@@ -1,7 +1,15 @@
 {%extends 'base.html'%}
 {% load render_table from django_tables2 %}
 
-{% block content %}
+{% block title %}
+<title>Veterinaria Ghandi - Clientes</title>
+{% endblock title %}
+
+{% block content%}
+<center> <h2>Área de Clientes</h2> </center>
+<br>
+
+<h3>Buscar Clientes</h3>
 
 <form method="POST" class="post-form" >
   {% csrf_token %}

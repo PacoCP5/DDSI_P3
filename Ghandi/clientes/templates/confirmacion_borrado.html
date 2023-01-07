@@ -1,6 +1,13 @@
 
 {%extends 'baseclientes.html'%}
+{% block title %}
+<title>Veterinaria Ghandi - Clientes</title>
+{% endblock title %}
+
 {% block content%}
+<br>
+
+    <center>
     <div style="center;"> 
 
         <h3>¿Está seguro de que quiere borrar el cliente con DNI: {{dni}}?</h3>
@@ -21,5 +28,6 @@
    
         </form>      
     </div>
+</center>
 
 {% endblock %}

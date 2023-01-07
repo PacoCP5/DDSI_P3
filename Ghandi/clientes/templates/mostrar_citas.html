@@ -1,7 +1,15 @@
-{%extends 'base.html'%}
+{%extends 'baseclientes.html'%}
 
-{% block content %}
+{% block title %}
+<title>Veterinaria Ghandi - Clientes</title>
+{% endblock title %}
 
+{% block content%}
+
+
+
+<center>
+  <h3>Mostrar citas</h3>
 <table class="table table-striped" style="width:800px">
     <thead>
       <tr>
@@ -44,7 +52,7 @@
       {% endfor %}
     </tbody>
   </table>
-
+</center>
   <center>
     <a class="btn btn-primary" href="{% url 'clientes:menu_clientes' %}" role="button">Volver al menú</a>
 </center> 

@@ -1,7 +1,13 @@
-{% extends 'base.html'%}
+{% extends 'baseclientes.html'%}
 
-{% block content %}
-<h2>Modificación cliente</h2>
+{% block title %}
+<title>Veterinaria Ghandi - Clientes</title>
+{% endblock title %}
+
+{% block content%}
+<br>
+<center>
+<h3>Modificación cliente</h3>
 <br>
 
 <form method="POST" class="post-form" >
@@ -13,6 +19,7 @@
 </form>
 
 <br>
+</center>
 <center>
     <a class="btn btn-primary" href="{% url 'clientes:menu_clientes' %}" role="button">Volver al menú</a>
 </center> 
