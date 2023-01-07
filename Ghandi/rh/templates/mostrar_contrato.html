@@ -1,0 +1,36 @@
+{%extends 'base.html'%}
+
+{% block content %}
+
+<table class="table table-bordered">
+    <thead>
+      <tr>
+        <th scope="dni">DNI</th>
+        <th scope="nombre">Nombre</th>
+        <th scope="apellidos">Apellidos</th>
+        <th scope="fecha_nacimiento">Fecha nacimiento</th>
+        <th scope="telefono">Teléfono</th>
+        <th scope="cuenta_bancaria">Cuenta bancaria</th>
+        <th scope="sueldo">Sueldo</th>
+        <th scope="duracion_contrato">Duración contrato</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for contrat in contrato %}
+        <tr>
+          <td>{{ contrat.dni }}</td>
+          <td>{{ contrat.nombre }}</td>
+          <td>{{ contrat.apellidos }}</td>
+          <td>{{ contrat.fecha_nacimiento }}</td>
+          <td>{{ contrat.telefono }}</td>
+          <td>{{ contrat.cuenta_bancaria }}</td>
+          <td>{{ contrat.sueldo }}</td>
+          <td>{{ contrat.duracion_contrato }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+<center>
+    <a class="btn btn-primary" href="{% url 'rh:menu_rh' %}" role="button">Volver al menú</a>
+</center>
+{% endblock%}

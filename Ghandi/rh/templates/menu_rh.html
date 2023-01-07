@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block content%}
+    <div style="center;"> 
+        <form method="post">  
+            {% csrf_token %}
+        <div>
+        <button class="btn btn-primary" id="alta_contrato-btn" name="alta_contrato-btn" type="submit">
+            Dar de alta un contrato
+        </button>
+        </div>
+        <br>
+        <div>
+            <button class="btn btn-primary" id="baja_contrato-btn" name="baja_contrato-btn" type="submit">
+                Dar de baja un contrato
+            </button>
+            </div>
+            <br>
+            <div>
+            <button class="btn btn-primary" id="agendar_entrevista-btn" name="agendar_entrevista-btn" type="submit">
+                Agendar una entrevista
+            </button>
+            </div>
+            <br>
+            <div>
+                <button class="btn btn-primary" id="consultar_contrato-btn" name="consultar_contrato-btn" type="submit">
+                    Consultar un contrato
+                </button>
+                </div>
+
+                <br>
+                <div>
+                    <button class="btn btn-primary" id="modificar_contrato-btn" name="modificar_contrato-btn" type="submit">
+                        Modificar un contrato
+                    </button>
+                    </div>
+        </form> 
+        <br>
+        
+        <center>
+            <div>
+                <a href="{% url 'login:menu' %}" class="btn btn-secondary" id="volver-menu-btn">Volver atrás</a>
+            </div>
+            </center>
+        
+    </div>
+
+{% endblock %}

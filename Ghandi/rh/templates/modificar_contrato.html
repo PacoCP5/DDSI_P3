@@ -1,0 +1,20 @@
+{% extends 'base.html'%}
+
+{% block content %}
+<h2>Modificar Contrato</h2>
+<br>
+
+<form method="POST" class="post-form" >
+    {% csrf_token %}
+    {{ form.as_p  }}
+    <br>
+    <br>
+    <button type="submit" class="btn btn-primary">Modificar Contrato</button>
+</form>
+
+<br>
+<center>
+    <a class="btn btn-primary" href="{% url 'rh:menu_rh' %}" role="button">Volver al menú</a>
+</center> 
+
+{% endblock %}
