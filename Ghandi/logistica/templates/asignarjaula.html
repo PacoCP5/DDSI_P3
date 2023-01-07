@@ -1,0 +1,33 @@
+{% extends 'base.html'%}
+
+{% block title %}
+<title>Veterinaria Ghandi - Logistica</title>
+{% endblock title %}
+
+{% block content%}
+<center> <h2>Área de Logística</h2> </center>
+<br>
+
+<h3>Asignar Jaula</h3>
+<br>
+
+<form method="POST" class="post-form" >
+    {% csrf_token %}
+    {{ form.as_p  }}
+    <br>
+    <br>
+    <button type="submit" class="btn btn-primary">Asignar Jaula a Animal</button>
+</form>
+
+<br>
+<center>
+    <a class="btn btn-secondary" href="{% url 'logistica:menu_logistica' %}" role="button">Volver al Menú del Subsistema</a>
+</center> 
+{% if error_message %}
+    <br>
+    <div class="alert alert-danger">
+        <center>{{ error_message }}</div></center>
+    </div>
+{% endif %}
+
+{% endblock %}

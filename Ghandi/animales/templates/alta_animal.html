@@ -1,0 +1,23 @@
+{% extends 'base.html'%}
+
+{% block content %}
+
+<DIV STYLE="border:10px; border-width:2px;border-style:solid;border-color:black; margin-bottom:30px;margin-top: 30px;">
+    <p style="margin:20px;">Por favor, tenga en cuenta que para poder insertar correctamente la tupla el dueño tiene que estar dado de alta. 
+        Así mismo, el identificador introducido no puede estar ya en el sistema.</p>
+  </DIV>
+
+<form method="POST" class="post-form" >
+    {% csrf_token %}
+    {{ form.as_p  }}
+    <br>
+    <br>
+    <button type="submit" class="btn btn-primary">Añadir Animal</button>
+</form>
+
+<br>
+<center>
+    <a class="btn btn-primary" href="{% url 'animales:menu_animales' %}" role="button">Volver al menú</a>
+</center> 
+
+{% endblock %}

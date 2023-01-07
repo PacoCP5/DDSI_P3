@@ -1,0 +1,32 @@
+{%extends 'base.html'%}
+
+{% block content %}
+
+<DIV STYLE="border:10px; border-width:2px;border-style:solid;border-color:black; margin-bottom:30px;margin-top: 30px;">
+  <p style="margin:20px;">Instrucciones para un uso correcto: desde aquí podrás realizar todas las consultas sobre animales que desees. Dispones dos opciones para relizarlas:
+  En primer lugar, si lo que quieres es consultar TODOS los animales, no introduzcas ningún valor.
+  Por otro lado, en caso de querer filtrar, por favor introduzca uno o más valores </p>
+</DIV>
+
+
+<form method="POST" class="post-form" >
+  {% csrf_token %}
+  {{ form.as_p  }}
+  <br>
+  <br>
+  <button type="submit" class="btn btn-primary">Buscar animales</button>
+</form>
+<br>
+<br>
+
+{% if error_message %}
+        <br>
+        <div class="alert alert-danger">
+            <center>{{ error_message }}</div></center>
+        </div>
+        {% endif %}
+
+  <center>
+    <a class="btn btn-primary" href="{% url 'animales:menu_animales' %}" role="button">Volver al menú</a>
+</center> 
+{% endblock%}

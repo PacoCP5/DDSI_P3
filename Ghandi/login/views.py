@@ -7,7 +7,8 @@ from .forms import LoginBDForm
 
 from . import bd
 
-
+import cx_Oracle
+#bd = 0
 
 def index(request):
     return render(request, "base.html")
@@ -19,7 +20,7 @@ def login(request):
             username = form.cleaned_data["username"]
             password = form.cleaned_data["password"]
             try:
-                global bd # para poder usar la variable global, ha de invocarse
+                #global bd # para poder usar la variable global, ha de invocarse
                 bd.ConnectionBD().establecer_conexion(username, password)
                 print("EStableciendo conexion: ", username, password)
 

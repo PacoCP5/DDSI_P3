@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Consulta de pedidos pendientes</h2>
+
+<div style="width: 100"></div>
+<table class="table table-bordered" style="width:600px">
+    <thead>
+      <tr>
+        <th scope="idpedido">idPedido</th>
+        <th scope="cantidad">Cantidad</th>
+        <th scope="fecha">Fecha</th>
+        <th scope="idproducto">idProducto</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for pedido in pedidos %}
+        <tr>
+          <td>{{ pedido.idpedido }}</td>
+          <td>{{ pedido.cantidad }}</td>
+          <td>{{ pedido.fecha }}</td>
+          <td>{{ pedido.idproducto }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+<center>
+    <a class="btn btn-secondary" href="{% url 'contabilidad:menu_contabilidad' %}" role="button">Volver al menú</a>
+</center> 
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2> Pagar un pedido existente </h2>
+
+<form method="POST" class="post-form" >
+    {% csrf_token %}
+    {{ form.as_p  }}
+    <br>
+    <br>
+    <button type="submit" class="btn btn-primary">Pagar pedido</button>
+</form>
+<br>
+
+<center>
+    <a class="btn btn-secondary" href="{% url 'contabilidad:menu_contabilidad' %}" role="button">Volver al menú</a>
+</center> 
+
+{% endblock %}

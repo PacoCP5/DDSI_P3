@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>Consultar salario</h2>
+
+<form method="POST" class="post-form" >
+    {% csrf_token %}
+    {{ form.as_p  }}
+    <br>
+    <br>
+    <button type="submit" class="btn btn-primary">Consultar salario</button>
+</form>
+<br>
+
+{% if sueldo %}
+
+    <div class="alert alert-success" role="alert">
+        El sueldo del trabajador con DNI {{ dni }} es de {{ sueldo }} €
+    </div>
+
+{% endif %}
+
+<br>
+<center>
+    <div>
+        <a href="{% url 'contabilidad:menu_contabilidad' %}" class="btn btn-secondary" id="volver-menu-btn">Volver atrás</a>
+    </div>
+</center>
+
+{% endblock %}

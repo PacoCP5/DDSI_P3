@@ -1,0 +1,57 @@
+{% extends 'base.html'%}
+
+{% block title %}
+<title>Veterinaria Ghandi - Logistica</title>
+{% endblock title %}
+
+{% block content%}
+<center> <h2>Área de Logística</h2> </center>
+<br>
+
+<h3>Consultar Disponibilidad Jaulas</h3>
+<br>
+
+<form method="POST" class="post-form" >
+    {% csrf_token %}
+    {{ form  }}
+    <br>
+    <br>
+    <button id="consulta1" name="consulta1" type="submit">Consultar Jaula</button>
+    <br>
+    <br>
+    <button id="consulta2" name="consulta2" type="submit">Consultar todas las Jaulas</button>
+</form>
+<br>
+<br>
+<div style="width: 100"></div>
+<table class="table table-bordered" style="width:600px">
+    <thead>
+      <tr>
+        <th scope="idProducto">idProducto</th>
+        <th scope="idAnimal">idAnimal</th>
+        <th scope="tamano">Tamaño Jaula</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for jaula in jaulas %}
+        <tr>
+          <td>{{ jaula.idjaula }}</td>
+          <td>{{ jaula.idanimal }}</td>
+          <td>{{ jaula.tamano }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+<br>
+<center>
+    <a class="btn btn-secondary" href="{% url 'logistica:menu_logistica' %}" role="button">Volver al menú del Subsistema</a>
+</center> 
+{% if error_message %}
+    <br>
+    <div class="alert alert-danger">
+        <center>{{ error_message }}</div></center>
+    </div>
+{% endif %}
+
+{% endblock %}
