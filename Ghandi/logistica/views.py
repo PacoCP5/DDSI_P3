@@ -41,14 +41,16 @@ def hacer_pedido(request):
             fecha = form.cleaned_data["fecha"]
             pagado = form.cleaned_data["pagado"]
             idproducto = form.cleaned_data["idproducto"]
-
+            print(cantidad)
             if (',' not in str(cantidad) and '.' not in str(cantidad)):
-                cantidad = str(cantidad) + '.0'            
+                cantidad = str(cantidad) + '.0'  
+            print(cantidad)          
             if ',' in str(cantidad):
-                cant_split = str(cantidad).split(',')
+                cant_split = (str(cantidad)).split(',')
                 cantidad = cant_split[0] + '.' + cant_split[1]
+            print(cantidad)
             try:
-                a = int(cantidad)
+                a = float(str(cantidad))
             except:
                 error_message="ERROR: Cantidad en Formato Incorrecto"
                 return render(request,"hacerpedido.html", {"form": form, "error_message": error_message})
@@ -115,7 +117,7 @@ def hacer_pedido(request):
                 
                 return redirect("logistica:hacer_pedido")
             except:
-                error_message="ERROR: No se puede insertar en la tabla"
+                error_message="ERROR: El SGBD no ha aceptado la operación"
                 return render(request,"hacerpedido.html", {"form": form, "error_message": error_message})
         else:
             error_message="[ERROR] Fallo en los datos introducidos"
@@ -201,7 +203,7 @@ def almacenar_producto(request):
                 
                 return redirect("logistica:almacenar_producto")
             except:
-                error_message="ERROR: No se puede insertar en la tabla"
+                error_message="ERROR: El SGBD no ha aceptado la operación"
                 return render(request,"almacenarproducto.html", {"form": AlmacenarForm, "error_message": error_message})
         else:
             error_message="[ERROR] Fallo en los datos introducidos"
@@ -391,7 +393,7 @@ def alta_producto_almacen(request):
                 
                 return redirect("logistica:alta_producto_almacen")
             except:
-                error_message="ERROR: No se puede insertar en la tabla"
+                error_message="ERROR: El SGBD no ha aceptado la operación"
                 return render(request,"altaproducto.html", {"form": AltaProductoForm(), "error_message": error_message})
         else:
             error_message="[ERROR] Fallo en los datos introducidos"
