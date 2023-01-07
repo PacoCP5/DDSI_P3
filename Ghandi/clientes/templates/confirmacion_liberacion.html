@@ -1,0 +1,25 @@
+
+{%extends 'baseclientes.html'%}
+{% block content%}
+    <div style="center;"> 
+
+        <h3>¿Está seguro de que quiere liberar la cita de: {{info}}?</h3>
+        <form method="post">  
+            {% csrf_token %}
+        <div>
+        <button class="btn btn-primary" id="liberar-btn" name="liberar-btn" type="submit">
+            Liberar
+        </button>
+        </div>
+        <br>
+        <div>
+            <button class="btn btn-primary" id="cancelar-btn" name="cancelar-btn" type="submit">
+                Cancelar
+            </button>
+            </div>
+            <br>
+   
+        </form>      
+    </div>
+
+{% endblock %}

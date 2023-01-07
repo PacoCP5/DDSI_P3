@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     'animales.apps.AnimalesConfig',
     'rh.apps.RhConfig',
     'logistica.apps.LogisticaConfig',
-    'bootstrap_datepicker_plus'
+    'bootstrap_datepicker_plus',
+    'django_tables2',
 ]
 
 MIDDLEWARE = [
@@ -117,7 +118,7 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
-
+DJANGO_TABLES2_TEMPLATE = "django_tables2/bootstrap4.html"
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
