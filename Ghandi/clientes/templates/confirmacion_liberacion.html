@@ -1,6 +1,15 @@
 
 {%extends 'baseclientes.html'%}
+
+{% block title %}
+<title>Veterinaria Ghandi - Clientes</title>
+{% endblock title %}
+
 {% block content%}
+<br>
+
+
+    <center>
     <div style="center;"> 
 
         <h3>¿Está seguro de que quiere liberar la cita de: {{info}}?</h3>
@@ -21,5 +30,5 @@
    
         </form>      
     </div>
-
+</center>
 {% endblock %}
