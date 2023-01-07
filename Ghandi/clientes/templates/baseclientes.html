@@ -14,12 +14,13 @@
   
 <body class="bg-light" >    
     
+  <center>
     {% for message in messages %}
       <div class="alert {{ message.tags }} alert-dismissible" role="alert">
         {{ message }}
       </div>
     {% endfor %}
-
+  </center>
     {% block content %}
     <center>
         <a class="btn btn-primary" href="login" role="button">ACCEDER AL MENU</a>

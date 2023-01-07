@@ -107,14 +107,13 @@ def alta_cliente(request):
                 
                 print("Dando de alta cliente: ", nombre, apellidos)
                 cursor = bd.ConnectionBD().get_conexion().cursor()
-                sql = "INSERT INTO cliente(dni, nombre, apellidos, telefono) VALUES ('{0}', '{1}', '{2}', '{3}')".format(str(dni),str(nombre), str(apellidos), str(telefono))
+                sql = "INSERT INTO cliente(dni, nombre, apellidos, telefono) VALUES ('{0}', '{1}', '{2}', '{3}')".format(str(dni),str(nombre).upper(), str(apellidos).upper(), str(telefono))
                 cursor.execute(sql)
                 bd.ConnectionBD().get_conexion().commit()
                 print(sql)
                 messages.success(request, 'Cliente añadido correctamente')
                 
-                # si se ha conectado bien a la BD, lo redireccionamos  a la url del menú principal de la aplicación
-                return redirect("cliente:alta_cliente")
+                return redirect("clientes:alta_cliente")
             except:
                 messages.error(request, 'Error al añadir el cliente: ese DNI no es válido')
                 error_message="ERROR: Datos del cliente incorrectos"
@@ -140,9 +139,9 @@ def modificar_cliente(request, pk):
             try:
                 sql = "UPDATE cliente SET "
                 if (dni != '') :sql += "dni='{0}'".format(str(dni))
-                if (nombre != '') :sql += ", nombre='{0}'".format(str(nombre))
-                if (apellidos != '') :sql += ", apellidos='{0}'".format(str(apellidos))
-                if (direccion != '') :sql += ", direccion='{0}'".format(str(direccion))
+                if (nombre != '') :sql += ", nombre='{0}'".format(str(nombre).upper())
+                if (apellidos != '') :sql += ", apellidos='{0}'".format(str(apellidos).upper())
+                if (direccion != '') :sql += ", direccion='{0}'".format(str(direccion).upper())
                 if (telefono != '') :sql += ", telefono='{0}'".format(str(telefono))
                 if (cuenta_bancaria != '') :sql += ", cuentabancaria='{0}'".format(str(cuenta_bancaria))
                 sql += "WHERE dni='{0}'".format( str(pk))

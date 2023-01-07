@@ -1,13 +1,12 @@
-{% extends 'base.html'%}
+{% extends 'baseclientes.html'%}
 
 {% block title %}
 <title>Veterinaria Ghandi - Clientes</title>
 {% endblock title %}
 
 {% block content%}
-<center> <h2>Área de Clientes</h2> </center>
 <br>
-
+<center>
 <h3>Dar de alta cliente</h3>
 <br>
 
@@ -22,7 +21,7 @@
     <br>
     <button type="submit" class="btn btn-primary">Añadir Cliente</button>
 </form>
-
+</center>
 <br>
 <center>
     <a class="btn btn-primary" href="{% url 'clientes:menu_clientes' %}" role="button">Volver al menú</a>
