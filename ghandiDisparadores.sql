@@ -99,6 +99,27 @@ BEGIN
 END;
 /
 
+CREATE OR REPLACE TRIGGER citaMismoDia
+   BEFORE
+   UPDATE
+   ON CITA
+   FOR EACH ROW
+DECLARE
+   PRAGMA AUTONOMOUS_TRANSACTION;
+   clienteYaTeniaCita INTEGER;
+BEGIN
+
+    IF UPDATING('DNI') OR UPDATING('DISPONIBILIDAD') OR UPDATING('FECHAHORA') OR INSERTING THEN
+        SELECT COUNT(*) INTO clienteYaTeniaCita FROM CITA 
+        WHERE (TO_CHAR(FECHAHORA,'DD/MM/YY') LIKE TO_CHAR(:NEW.FECHAHORA,'DD/MM/YY') AND DNI = :NEW.DNI);
+        
+        IF clienteYaTeniaCita > 0 THEN
+            raise_application_error(-20340, 'ERROR: Un Cliente solo puede tener 1 cita por dia');
+        END IF;
+    END IF;
+END;
+/
+
 CREATE OR REPLACE TRIGGER animalYaEnjaulado
    BEFORE
    INSERT OR UPDATE
