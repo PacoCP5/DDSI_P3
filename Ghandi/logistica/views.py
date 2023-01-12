@@ -113,7 +113,7 @@ def hacer_pedido(request):
                 print("llego casi commit")
                 bd.ConnectionBD().get_conexion().commit()
                 
-                messages.success(request, '    Producto Registrado con Éxito')
+                messages.success(request, '    Pedido Realizado con Éxito')
                 
                 return redirect("logistica:hacer_pedido")
             except:
@@ -199,7 +199,7 @@ def almacenar_producto(request):
                 print("llego casi commit")
                 bd.ConnectionBD().get_conexion().commit()
                 
-                messages.success(request, '    Pedido Realizado con Éxito')
+                messages.success(request, '    Producto Almacenado con Éxito')
                 
                 return redirect("logistica:almacenar_producto")
             except:
