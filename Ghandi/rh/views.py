@@ -46,7 +46,7 @@ def alta_contrato(request):
                         messages.error(request, '[ERROR] Ya existe un contrato asociado al DNI ingresado')
                         return render(request,"alta_contrato.html", {"form": form})
                     else:                        
-                        sql = "INSERT INTO CONTRATO VALUES ('{0}', '{1}', '{2}', TO_DATE('{3}','DD-MM-YYYY'), '{4}', '{5}', '{6}', '{7}')".format(str(dni), str(nombre), str(apellidos), str(fecha_nacimiento), str(telefono), str(cuenta_bancaria), str(sueldo), str(duracion_contrato))
+                        sql = "INSERT INTO CONTRATO VALUES ('{0}', '{1}', '{2}', TO_DATE('{3}','YYYY-DD-MM'), '{4}', '{5}', '{6}', '{7}')".format(str(dni), str(nombre), str(apellidos), str(fecha_nacimiento), str(telefono), str(cuenta_bancaria), str(sueldo), str(duracion_contrato))
                         cursor.execute(sql)
                         bd.ConnectionBD().get_conexion().commit()
                         messages.success(request, '[INFO] Contrato guardado correctamente')

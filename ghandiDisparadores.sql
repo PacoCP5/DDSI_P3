@@ -34,23 +34,6 @@ BEGIN
 END;
 /
 
-CREATE OR REPLACE TRIGGER contratoMayorEdad
-    BEFORE 
-    INSERT OR UPDATE 
-    ON CONTRATO 
-    FOR EACH ROW
-DECLARE
-	errorEdad EXCEPTION;
-BEGIN
-	IF DATEDIFF(year, :new.Fecha_Nacim, GETDATE()) < 18 THEN
-		RAISE errorEdad;
-	END IF;
-EXCEPTION
-    WHEN errorEdad THEN
-        DBMS_OUTPUT.PUT_LINE('[ERROR] El nuevo empleado debe ser mayor de edad');
-        raise_application_error(-10212, :new.DNI || ' es menor de edad');
-END;
-/
 
 CREATE OR REPLACE TRIGGER contratoSalarioLegal
     BEFORE 
@@ -62,6 +45,20 @@ DECLARE
 BEGIN
 	IF :new.SUELDO < 1000 THEN
         raise_application_error(-10213, 'ERROR: El Salario debe ser mayor que el SMI');
+	END IF;
+END;
+/
+
+CREATE OR REPLACE TRIGGER contratoSalarioMax
+    BEFORE 
+    INSERT OR UPDATE 
+    ON CONTRATO 
+    FOR EACH ROW
+DECLARE
+    PRAGMA AUTONOMOUS_TRANSACTION;
+BEGIN
+	IF :new.SUELDO > 10000 THEN
+        raise_application_error(-10214, 'ERROR: El Salario no puede ser tan alto');
 	END IF;
 END;
 /
