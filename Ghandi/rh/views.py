@@ -33,8 +33,8 @@ def alta_contrato(request):
             apellidos = form.cleaned_data["apellidos"]
             fecha_nacimiento = form.cleaned_data["fecha_nacimiento"]
             telefono = form.cleaned_data["telefono"]
-            cuenta_bancaria = form.cleaned_data["cuenta_bancaria"]
             sueldo = form.cleaned_data["sueldo"]
+            cuenta_bancaria = form.cleaned_data["cuenta_bancaria"]
             duracion_contrato = form.cleaned_data["duracion_contrato"]  
             try:
                 with bd.ConnectionBD().get_conexion().cursor() as cursor:
@@ -46,14 +46,14 @@ def alta_contrato(request):
                         messages.error(request, '[ERROR] Ya existe un contrato asociado al DNI ingresado')
                         return render(request,"alta_contrato.html", {"form": form})
                     else:                        
-                        sql = "INSERT INTO CONTRATO VALUES ('{0}', '{1}', '{2}', TO_DATE('{3}','YYYY-DD-MM'), '{4}', '{5}', '{6}', '{7}')".format(str(dni), str(nombre), str(apellidos), str(fecha_nacimiento), str(telefono), str(cuenta_bancaria), str(sueldo), str(duracion_contrato))
+                        sql = "INSERT INTO CONTRATO VALUES ('{0}', '{1}', '{2}', TO_DATE('{3}','YYYY-DD-MM'), '{4}', '{5}', '{6}', '{7}')".format(str(dni), str(nombre), str(apellidos), str(fecha_nacimiento), str(telefono), str(sueldo), str(cuenta_bancaria), str(duracion_contrato))
                         cursor.execute(sql)
                         bd.ConnectionBD().get_conexion().commit()
                         messages.success(request, '[INFO] Contrato guardado correctamente')
             except:
                 messages.error(request, '[ERROR] Fallo al guardar el contrato')
                 return render(request,"alta_contrato.html", {"form": form})
-            
+                
     return render(request, 'alta_contrato.html',{'form':form})
 
 
@@ -147,21 +147,25 @@ def modificar_contrato(request):
             apellidos = form.cleaned_data["apellidos"]
             fecha_nacimiento = form.cleaned_data["fecha_nacimiento"]
             telefono = form.cleaned_data["telefono"]
-            cuenta_bancaria = form.cleaned_data["cuenta_bancaria"]
             sueldo = form.cleaned_data["sueldo"]
+            cuenta_bancaria = form.cleaned_data["cuenta_bancaria"]
             duracion_contrato = form.cleaned_data["duracion_contrato"] 
 
-            sql = "SELECT * FROM CONTRATO WHERE DNI = '{0}'".format(str(dni))
-            cursor.execute(sql)
-            consulta = cursor.fetchone()
-
-            if consulta is not None:    
-                sql = "UPDATE CONTRATO SET NOMBRE='{1}', APELLIDOS='{2}',FECHA_NACIM=TO_DATE('{3}','YYYY-DD-MM'),TELEFONO='{4}',SUELDO='{5}',CUENTABANCARIA='{6}',DURACION='{7}' WHERE DNI = '{0}'".format(str(dni), str(nombre), str(apellidos), str(fecha_nacimiento), str(telefono), str(cuenta_bancaria), str(sueldo), str(duracion_contrato))
+            try:
+                sql = "SELECT * FROM CONTRATO WHERE DNI = '{0}'".format(str(dni))
                 cursor.execute(sql)
-                bd.ConnectionBD().get_conexion().commit()
-                messages.success(request, '[INFO] Contrato modificado correctamente')
-            else:
-                messages.error(request, '[ERROR] No existe un contrato con el ID ingresado')
+                consulta = cursor.fetchone()
+
+                if consulta is not None:    
+                    sql = "UPDATE CONTRATO SET NOMBRE='{1}', APELLIDOS='{2}',FECHA_NACIM=TO_DATE('{3}','YYYY-DD-MM'),TELEFONO='{4}',SUELDO='{5}',CUENTABANCARIA='{6}',DURACION='{7}' WHERE DNI = '{0}'".format(str(dni), str(nombre), str(apellidos), str(fecha_nacimiento), str(telefono), str(sueldo), str(cuenta_bancaria), str(duracion_contrato))
+                    cursor.execute(sql)
+                    bd.ConnectionBD().get_conexion().commit()
+                    messages.success(request, '[INFO] Contrato modificado correctamente')
+                else:
+                    messages.error(request, '[ERROR] No existe un contrato con el ID ingresado')
+                    return render(request,"modificar_contrato.html", {"form": form})
+            except:
+                messages.error(request, '[ERROR] Fallo al modificar el contrato')
                 return render(request,"modificar_contrato.html", {"form": form})
     
     return render(request, 'modificar_contrato.html',{'form':form})

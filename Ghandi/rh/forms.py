@@ -6,8 +6,8 @@ class ContratoForm(forms.Form):
     apellidos = forms.CharField(label="Apellidos",widget=forms.TextInput(attrs={'placeholder': "Apellidos"}))
     fecha_nacimiento = forms.DateField(label="FechaNacimiento", widget=forms.TextInput(attrs={'placeholder': "Fecha de nacimiento (MM/DD/YYYY)"}))
     telefono = forms.CharField(label="Telefono", widget=forms.TextInput(attrs={'placeholder': "Telefono"}))
-    cuenta_bancaria = forms.CharField(label="CuentaBancaria",widget=forms.TextInput(attrs={'placeholder': "CuentaBancaria"}))
     sueldo = forms.FloatField(label="Sueldo", widget=forms.TextInput(attrs={'placeholder': "Sueldo"}))
+    cuenta_bancaria = forms.CharField(label="CuentaBancaria",widget=forms.TextInput(attrs={'placeholder': "CuentaBancaria"}))
     duracion_contrato = forms.CharField(label="Duracion",widget=forms.TextInput(attrs={'placeholder': "Durancion del contrato"}))
 
 class DNIForm(forms.Form):
@@ -26,6 +26,6 @@ class ModificaForm(forms.Form):
     apellidos = forms.CharField(label="Apellidos",widget=forms.TextInput(attrs={'placeholder': "Apellidos nuevos"}))
     fecha_nacimiento = forms.DateField(label="FechaNacimiento", widget=forms.TextInput(attrs={'placeholder': "Fecha de nacimiento (MM/DD/YYYY)"}))
     telefono = forms.CharField(label="Telefono", widget=forms.TextInput(attrs={'placeholder': "Telefono"}))
-    cuenta_bancaria = forms.CharField(label="CuentaBancaria",widget=forms.TextInput(attrs={'placeholder': "CuentaBancaria"}))
     sueldo = forms.FloatField(label="Sueldo", widget=forms.TextInput(attrs={'placeholder': "Sueldo"}))
+    cuenta_bancaria = forms.CharField(label="CuentaBancaria",widget=forms.TextInput(attrs={'placeholder': "CuentaBancaria"}))
     duracion_contrato = forms.CharField(label="Duracion",widget=forms.TextInput(attrs={'placeholder': "Durancion del contrato"}))
