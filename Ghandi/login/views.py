@@ -2,7 +2,9 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.contrib import messages
-
+import datetime
+from datetime import datetime as dt
+from datetime import timedelta
 from .forms import LoginBDForm
 
 from . import bd
@@ -23,7 +25,6 @@ def login(request):
                 #global bd # para poder usar la variable global, ha de invocarse
                 bd.ConnectionBD().establecer_conexion(username, password)
                 print("EStableciendo conexion: ", username, password)
-
                 # si se ha conectado bien a la BD, lo redireccionamos  a la url del menú principal de la aplicación
                 return redirect("login:menu")
             except:
@@ -32,6 +33,13 @@ def login(request):
 
     # si no se ha hecho un post o hay errores en los campos del form, se presenta de nuevo el formulario vacío para rellenarlo
     return render(request,"login.html", {"form": LoginBDForm()})
+
+
+
+    
+    
+
+
 
 def menu(request):
     if request.method == 'POST':

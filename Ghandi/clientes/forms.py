@@ -14,6 +14,18 @@ class NuevoClienteForm(forms.Form):
    dni = forms.CharField(label="DNI",widget=forms.TextInput(attrs={'placeholder': "Introduce DNI del cliente"}))
    cuenta_banco = forms.CharField(label="Cuenta Banco",widget=forms.TextInput(attrs={'placeholder': "Introduce cuenta del banco del cliente"}), required=False)
 
+class ModificarClienteForm(forms.Form):
+   nombre = forms.CharField(
+                  label="Nombre",
+                  widget=forms.TextInput(attrs={'placeholder': "Introduce nombre del cliente"}))
+   apellidos = forms.CharField(
+                  label="Apellidos",
+                  widget=forms.TextInput(attrs={'placeholder': "Introduce apellidos del cliente"}))
+   telefono = forms.CharField(label="Telefono",widget=forms.TextInput(attrs={'placeholder': "Introduce telefono del cliente"}), required=False)
+   direccion = forms.CharField(label="Direccion",widget=forms.TextInput(attrs={'placeholder': "Introduce direccion del cliente"}), required=False)
+   cuenta_banco = forms.CharField(label="Cuenta Banco",widget=forms.TextInput(attrs={'placeholder': "Introduce cuenta del banco del cliente"}), required=False)
+
+
 class BuscarClienteForm(  forms.Form):
    nombre = forms.CharField(
                   label="Nombre",
@@ -21,7 +33,7 @@ class BuscarClienteForm(  forms.Form):
    apellidos = forms.CharField(
                   label="Apellidos",
                   widget=forms.TextInput(attrs={'placeholder': "Introduce apellidos del cliente"}), required=False)
-   dni = forms.CharField(label="DNI",widget=forms.TextInput(attrs={'placeholder': "Introduce DNI del cliente"}))
+   dni = forms.CharField(label="DNI",widget=forms.TextInput(attrs={'placeholder': "Introduce DNI del cliente"}), required=False)
 
 
 class BuscarFechaForm(forms.Form):

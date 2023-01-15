@@ -51,8 +51,9 @@
           <td>{{ cliente.nombre }}</td>
           <td>{{ cliente.apellido }}</td>
           <td>{{ cliente.telefono }}</td>
-          <td>{{ cliente.cuenta }}</td>
+          
           <td>{{ cliente.direccion }}</td>
+          <td>{{ cliente.cuenta }}</td>
           <td><a href="{% url 'clientes:confirmar_borrado' pk=cliente.dni %}">
             <button type="button" class="btn btn-danger">Delete</button>
           </a> <br> <a href="{% url 'clientes:modificar_cliente' pk=cliente.dni %}">

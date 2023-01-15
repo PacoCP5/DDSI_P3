@@ -3,7 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from login import bd 
-from .forms import NuevoClienteForm, BuscarClienteForm, BuscarFechaForm
+from .forms import NuevoClienteForm, BuscarClienteForm, BuscarFechaForm, ModificarClienteForm
 from .tables import ClienteTabla, ClienteTablaCompleta, Horas
 from datetime import datetime
 from django.urls import reverse
@@ -43,16 +43,33 @@ def buscar_clientes(request):
             
             
             try:
-                print("Buscando cliente: ", dni)
-                cursor = bd.ConnectionBD().get_conexion().cursor()
-                print("Buscando cliente: ", dni)
                 clientes = [] 
-                sql = "SELECT dni, nombre, apellidos, telefono, direccion, cuentabancaria FROM cliente WHERE dni = '{0}'".format(str(dni))
-                print(sql)
-                if (nombre != ""):
-                    sql +="AND nombre = '{0}'".format(str(nombre))
-                if (apellidos != ""):
-                    sql +="AND apellidos = '{0}'".format(str(apellidos))
+                if (dni != ""):
+                    print("Buscando cliente: ", dni)
+                    
+                    
+                    sql = "SELECT dni, nombre, apellidos, telefono, direccion, cuentabancaria FROM cliente WHERE dni = '{0}'".format(str(dni))
+                    
+                    if (nombre != ""):
+                        sql +="AND nombre = '{0}'".format(str(nombre))
+                    if (apellidos != ""):
+                        sql +="AND apellidos = '{0}'".format(str(apellidos))
+                    print(sql)
+                else:
+                    sql = "SELECT dni, nombre, apellidos, telefono, direccion, cuentabancaria FROM cliente"
+                    
+                    if (nombre !="" or apellidos != ""):
+                        sql += " WHERE"
+                        if (nombre != ""):
+                            sql +=" nombre = '{0}'".format(str(nombre))
+                            if (apellidos != ""):
+                                sql +=" AND apellidos = '{0}'".format(str(apellidos))
+                        else:
+                            sql +=" apellidos = '{0}'".format(str(apellidos))  
+                    print(sql)
+
+
+                cursor = bd.ConnectionBD().get_conexion().cursor()
                 cursor.execute(sql)
                 print(sql)
                 clientes = [ {'dni':fila[0], 'nombre':fila[1], 'apellido':fila[2], 'telefono':fila[3], 'direccion':fila[4], 'cuenta':fila[5]} for fila in  cursor.fetchall()]
@@ -124,22 +141,20 @@ def alta_cliente(request):
 
 def modificar_cliente(request, pk):
     if request.method == 'POST':
-        form = NuevoClienteForm(request.POST)
+        form = ModificarClienteForm(request.POST)
         if form.is_valid():
             print(form.cleaned_data)
             nombre = form.cleaned_data["nombre"]
             apellidos = form.cleaned_data["apellidos"]
             direccion = form.cleaned_data["direccion"]
             telefono = form.cleaned_data["telefono"]
-            dni = form.cleaned_data["dni"]
             cuenta_bancaria = form.cleaned_data["cuenta_banco"]
                 
             print("Modificando cliente: ", nombre, apellidos)
             cursor = bd.ConnectionBD().get_conexion().cursor()
             try:
                 sql = "UPDATE cliente SET "
-                if (dni != '') :sql += "dni='{0}'".format(str(dni))
-                if (nombre != '') :sql += ", nombre='{0}'".format(str(nombre).upper())
+                if (nombre != '') :sql += "nombre='{0}'".format(str(nombre).upper())
                 if (apellidos != '') :sql += ", apellidos='{0}'".format(str(apellidos).upper())
                 if (direccion != '') :sql += ", direccion='{0}'".format(str(direccion).upper())
                 if (telefono != '') :sql += ", telefono='{0}'".format(str(telefono))
@@ -152,8 +167,8 @@ def modificar_cliente(request, pk):
                 
                 messages.success(request, 'Cliente modificado correctamente')
             except:
-                messages.error(request, 'Error al modificar el cliente: el DNI no es válido')
-                error_message="ERROR: Datos del cliente incorrectos"
+                messages.error(request, 'Error al modificar el cliente, datos no válidos')
+                error_message="ERROR: Datos del cliente incorrectos. Pruebe a dar de alta un nuevo cliente"
                 return render(request,"alta_cliente.html", {"form": form, "error_message": error_message})
 
             # si se ha conectado bien a la BD, lo redireccionamos  a la url del menú principal de la aplicación
@@ -173,12 +188,12 @@ def modificar_cliente(request, pk):
 
         if (cliente[5]!=''): valores_iniciales['cuenta_banco']=cliente[5]
 
-        form = NuevoClienteForm(initial=valores_iniciales)
-        return render(request, "modificar_cliente.html", {"form": form})
+        form = ModificarClienteForm(initial=valores_iniciales)
+        return render(request, "modificar_cliente.html", {"form": form, "dni": pk})
     except:
-        form = NuevoClienteForm(initial={'dni':pk})
+        form = ModificarClienteForm()
         error_message="ERROR: No se han podido cargar los datos iniciales"
-        return render(request,"modificar_cliente.html", {"form": form, "error_message": error_message})
+        return render(request,"modificar_cliente.html", {"form": form, "dni": pk, "error_message": error_message})
     
             
 def confirmar_borrado_cliente(request, pk):
@@ -263,7 +278,7 @@ def asignar_cliente(request, pk, fecha):
         bd.ConnectionBD().get_conexion().commit()
         return redirect("clientes:mostrar_citas")
     except:
-        messages.error(request, 'Error asignando cliente a cita')
+        messages.error(request, 'Error asignando cliente a cita, ese cliente ya tiene otra cita el mismo día')
         error_message="ERROR: Asignación incorrecta incorrecto"
         return redirect(reverse("clientes:reservar_cita", kwargs={ 'pk': fecha }))
 
@@ -286,6 +301,8 @@ def menu_cliente(request):
             return redirect("clientes:mostrar_citas")
         elif 'modificar-cliente-btn' in keys_request_POST:
             return redirect("clientes:modificar_cliente")
+
+        
     
     return render(request, 'menu_cliente.html')
 
